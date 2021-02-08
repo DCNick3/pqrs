@@ -1,0 +1,12 @@
+[submodule "ext-deps/xtensor"]
+	path = ext-deps/xtensor
+	url = https://github.com/xtensor-stack/xtensor.git
+[submodule "ext-deps/xtl"]
+	path = ext-deps/xtl
+	url = https://github.com/xtensor-stack/xtl.git
+[submodule "ext-deps/dynamic_bitset"]
+	path = ext-deps/dynamic_bitset
+	url = https://github.com/pinam45/dynamic_bitset.git
+[submodule "ext-deps/singular"]
+	path = ext-deps/singular
+	url = https://github.com/kikuomax/singular.git
