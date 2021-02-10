@@ -13,7 +13,6 @@
 #include <algorithm>
 #include <utility>
 #include <iostream>
-#include <CLucene.h>
 
 // this one is much more inspired by zxing's ReedSolomonDecoder
 
