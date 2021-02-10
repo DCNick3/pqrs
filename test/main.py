@@ -36,7 +36,7 @@ def main(program, dataset_path):
 				img_ppm = output.getvalue()
 
 			start_time = time.perf_counter_ns()
-			p = subprocess.Popen([str(program.absolute()), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+			p = subprocess.Popen([str(program.absolute()), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			(stdout, stderr) = p.communicate(input=img_ppm)
 			returncode = p.wait()
 			end_time = time.perf_counter_ns()
