@@ -13,7 +13,8 @@ add_library(pqrs STATIC
         homography_dlt.cpp
         qr_scanner.cpp
         qr_version_info.cpp
-        qr_bitstream_reader.cpp)
+        qr_bitstream_reader.cpp
+        )
 target_link_libraries(pqrs PUBLIC xtensor sul::dynamic_bitset)
 target_include_directories(pqrs PUBLIC include)
 

@@ -4,12 +4,11 @@
 
 #include <pqrs/qr_scanner.h>
 #include <pqrs/qr_decoder.h>
+#include <pqrs/qr_bitstream_reader.h>
 #include <pqrs/homography_dlt.h>
 #include <pqrs/interpolation.h>
 #include <pqrs/direction4.h>
 #include <pqrs/util.h>
-
-#include <xtensor/xio.hpp>
 
 #include <utility>
 #include <vector>
@@ -361,7 +360,7 @@ namespace pqrs {
                 }
             }
 
-            homography make_homography() {
+            [[nodiscard]] homography make_homography() const {
                 std::vector<std::pair<vector2d, vector2d>> pts;
 
                 auto module_size = 17.f + (float)*version * 4;
@@ -379,6 +378,11 @@ namespace pqrs {
                 pts.push_back({{0, module_size - 7}, bottom.poly[3]});
 
                 return estimate_homography(pts);
+            }
+
+            [[nodiscard]] qr_grid make_grid(gray_u8 const& image) const {
+                auto homo = make_homography();
+                return qr_grid(image, (bottom.gray_threshold + right.gray_threshold + origin.gray_threshold) / 3, homo);
             }
         };
 
@@ -466,6 +470,12 @@ namespace pqrs {
                 continue;
 
             // TODO: detect alignment patterns to add more features for homography
+
+            /*auto grid = candidate.make_grid(image);
+
+            auto raw_data = read_raw_data(*candidate.version, *candidate.format, [&](point2d p) {
+                return grid.sample((float)p.x() + .5f , (float)p.y() + .5f);
+            });*/
 
             res.emplace_back(*candidate.version, *candidate.format, candidate.make_homography());
         }

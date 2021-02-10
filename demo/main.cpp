@@ -105,21 +105,24 @@ int main(int argc, char* argv[]) {
 
     auto qr_codes = pqrs::scan_qr_codes(gray, finder_patterns);
 
-    for (auto const& qr_code : qr_codes) {
-
-        pqrs::read_bitset(qr_code._version, qr_code._format);
-
-        for (int i = 0; i < qr_code.size(); i++) {
-            for (int j = 0; j < qr_code.size(); j++) {
-                auto p = qr_code._homography.map(pqrs::vector2d(i + .5f, j + .5f));
-                img(p.y(), p.x(), 0) = 255;
-                img(p.y(), p.x(), 1) = 0;
-                img(p.y(), p.x(), 2) = 255;
+    for (auto const& code : qr_codes) {
+        int size = code.size();
+        int oversampling = 1;
+        int round = 2;
+        pqrs::gray_u8 im({(size + round * 2U) * oversampling, (size + round * 2U) * oversampling});
+        for (int i = -round * oversampling; i < (size + round) * oversampling; i++) {
+            for (int j = -round * oversampling; j < (size + round) * oversampling; j++) {
+                im(j + round * oversampling, i + round * oversampling) = (std::uint8_t)
+                        pqrs::interpolate_bilinear(gray,
+                                                   code._homography.map({
+                                                       (float)i / (float)oversampling + .5f,
+                                                       (float)j / (float)oversampling + .5f}));
             }
         }
+        ostream << pqrs::save_ppm(im);
     }
 
-    ostream << pqrs::save_ppm(img);
+    //ostream << pqrs::save_ppm(img);
 
 
 

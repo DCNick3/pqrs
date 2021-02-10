@@ -22,7 +22,7 @@ namespace pqrs {
         inline float impl(Getter const& getter, float x, float y) {
             int xt = (int)x;
             int yt = (int)y;
-            return interp(getter(yt, xt), getter(yt, xt + 1), getter(yt + 1, xt), getter(yt + 1, xt + 1),
+            return interp(getter(yt, xt), getter(yt, xt + 1), getter(yt + 1, xt + 1), getter(yt + 1, xt),
                           x - (float) xt, y - (float) yt);
         }
     }

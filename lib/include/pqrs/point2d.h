@@ -47,6 +47,7 @@ namespace pqrs {
         constexpr inline point2d operator-(direction8 o) const { return *this - point2d(o); }
 
         inline point2d& operator+=(direction8 o) { return *this = *this + o; }
+        inline point2d& operator+=(point2d o) { return *this = *this + o; }
 
         [[nodiscard]] constexpr inline int norm_squared() const { return x() * x() + y() * y(); }
         [[nodiscard]] constexpr inline double norm() const { return std::sqrt((double)norm_squared()); }

@@ -1,0 +1,2371 @@
+[
+  {
+    "alignment": [],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 19
+          }
+        ],
+        "ecCodewordsPerBlock": 7
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 10
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 13
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 9
+          }
+        ],
+        "ecCodewordsPerBlock": 17
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      18
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 34
+          }
+        ],
+        "ecCodewordsPerBlock": 10
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 28
+          }
+        ],
+        "ecCodewordsPerBlock": 16
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 22
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      22
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 55
+          }
+        ],
+        "ecCodewordsPerBlock": 15
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 44
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 80
+          }
+        ],
+        "ecCodewordsPerBlock": 20
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 32
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 24
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 9
+          }
+        ],
+        "ecCodewordsPerBlock": 16
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 108
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 43
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 15
+          },
+          {
+            "count": 2,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 11
+          },
+          {
+            "count": 2,
+            "dataCodewords": 12
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 68
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 27
+          }
+        ],
+        "ecCodewordsPerBlock": 16
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 19
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      22,
+      38
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 78
+          }
+        ],
+        "ecCodewordsPerBlock": 20
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 31
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 14
+          },
+          {
+            "count": 4,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 13
+          },
+          {
+            "count": 1,
+            "dataCodewords": 14
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      24,
+      42
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 97
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 38
+          },
+          {
+            "count": 2,
+            "dataCodewords": 39
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 18
+          },
+          {
+            "count": 2,
+            "dataCodewords": 19
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 14
+          },
+          {
+            "count": 2,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      46
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 36
+          },
+          {
+            "count": 2,
+            "dataCodewords": 37
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 16
+          },
+          {
+            "count": 4,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 20
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 12
+          },
+          {
+            "count": 4,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      28,
+      50
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 68
+          },
+          {
+            "count": 2,
+            "dataCodewords": 69
+          }
+        ],
+        "ecCodewordsPerBlock": 18
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 43
+          },
+          {
+            "count": 1,
+            "dataCodewords": 44
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 19
+          },
+          {
+            "count": 2,
+            "dataCodewords": 20
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 15
+          },
+          {
+            "count": 2,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      54
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 81
+          }
+        ],
+        "ecCodewordsPerBlock": 20
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 50
+          },
+          {
+            "count": 4,
+            "dataCodewords": 51
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 22
+          },
+          {
+            "count": 4,
+            "dataCodewords": 23
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 12
+          },
+          {
+            "count": 8,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      32,
+      58
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 92
+          },
+          {
+            "count": 2,
+            "dataCodewords": 93
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 36
+          },
+          {
+            "count": 2,
+            "dataCodewords": 37
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 20
+          },
+          {
+            "count": 6,
+            "dataCodewords": 21
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 7,
+            "dataCodewords": 14
+          },
+          {
+            "count": 4,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34,
+      62
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 107
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 37
+          },
+          {
+            "count": 1,
+            "dataCodewords": 38
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 20
+          },
+          {
+            "count": 4,
+            "dataCodewords": 21
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 12,
+            "dataCodewords": 11
+          },
+          {
+            "count": 4,
+            "dataCodewords": 12
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      46,
+      66
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 115
+          },
+          {
+            "count": 1,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 40
+          },
+          {
+            "count": 5,
+            "dataCodewords": 41
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 16
+          },
+          {
+            "count": 5,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 20
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 12
+          },
+          {
+            "count": 5,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      48,
+      70
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 87
+          },
+          {
+            "count": 1,
+            "dataCodewords": 88
+          }
+        ],
+        "ecCodewordsPerBlock": 22
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 41
+          },
+          {
+            "count": 5,
+            "dataCodewords": 42
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 24
+          },
+          {
+            "count": 7,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 12
+          },
+          {
+            "count": 7,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      50,
+      74
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 98
+          },
+          {
+            "count": 1,
+            "dataCodewords": 99
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 7,
+            "dataCodewords": 45
+          },
+          {
+            "count": 3,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 15,
+            "dataCodewords": 19
+          },
+          {
+            "count": 2,
+            "dataCodewords": 20
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 15
+          },
+          {
+            "count": 13,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      54,
+      78
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 107
+          },
+          {
+            "count": 5,
+            "dataCodewords": 108
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 10,
+            "dataCodewords": 46
+          },
+          {
+            "count": 1,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 22
+          },
+          {
+            "count": 15,
+            "dataCodewords": 23
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 14
+          },
+          {
+            "count": 17,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      56,
+      82
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 120
+          },
+          {
+            "count": 1,
+            "dataCodewords": 121
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 9,
+            "dataCodewords": 43
+          },
+          {
+            "count": 4,
+            "dataCodewords": 44
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 22
+          },
+          {
+            "count": 1,
+            "dataCodewords": 23
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 14
+          },
+          {
+            "count": 19,
+            "dataCodewords": 15
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      58,
+      86
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 113
+          },
+          {
+            "count": 4,
+            "dataCodewords": 114
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 44
+          },
+          {
+            "count": 11,
+            "dataCodewords": 45
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 21
+          },
+          {
+            "count": 4,
+            "dataCodewords": 22
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 9,
+            "dataCodewords": 13
+          },
+          {
+            "count": 16,
+            "dataCodewords": 14
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34,
+      62,
+      90
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 107
+          },
+          {
+            "count": 5,
+            "dataCodewords": 108
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 41
+          },
+          {
+            "count": 13,
+            "dataCodewords": 42
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 15,
+            "dataCodewords": 24
+          },
+          {
+            "count": 5,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 15,
+            "dataCodewords": 15
+          },
+          {
+            "count": 10,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      28,
+      50,
+      72,
+      94
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 116
+          },
+          {
+            "count": 4,
+            "dataCodewords": 117
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 42
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 22
+          },
+          {
+            "count": 6,
+            "dataCodewords": 23
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 16
+          },
+          {
+            "count": 6,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      50,
+      74,
+      98
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 111
+          },
+          {
+            "count": 7,
+            "dataCodewords": 112
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 7,
+            "dataCodewords": 24
+          },
+          {
+            "count": 16,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 34,
+            "dataCodewords": 13
+          }
+        ],
+        "ecCodewordsPerBlock": 24
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      54,
+      78,
+      102
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 121
+          },
+          {
+            "count": 5,
+            "dataCodewords": 122
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 47
+          },
+          {
+            "count": 14,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 24
+          },
+          {
+            "count": 14,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 16,
+            "dataCodewords": 15
+          },
+          {
+            "count": 14,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      28,
+      54,
+      80,
+      106
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 117
+          },
+          {
+            "count": 4,
+            "dataCodewords": 118
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 45
+          },
+          {
+            "count": 14,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 24
+          },
+          {
+            "count": 16,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 30,
+            "dataCodewords": 16
+          },
+          {
+            "count": 2,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      32,
+      58,
+      84,
+      110
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 106
+          },
+          {
+            "count": 4,
+            "dataCodewords": 107
+          }
+        ],
+        "ecCodewordsPerBlock": 26
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 47
+          },
+          {
+            "count": 13,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 7,
+            "dataCodewords": 24
+          },
+          {
+            "count": 22,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 22,
+            "dataCodewords": 15
+          },
+          {
+            "count": 13,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      58,
+      86,
+      114
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 10,
+            "dataCodewords": 114
+          },
+          {
+            "count": 2,
+            "dataCodewords": 115
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 46
+          },
+          {
+            "count": 4,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 28,
+            "dataCodewords": 22
+          },
+          {
+            "count": 6,
+            "dataCodewords": 23
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 33,
+            "dataCodewords": 16
+          },
+          {
+            "count": 4,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34,
+      62,
+      90,
+      118
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 122
+          },
+          {
+            "count": 4,
+            "dataCodewords": 123
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 22,
+            "dataCodewords": 45
+          },
+          {
+            "count": 3,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 8,
+            "dataCodewords": 23
+          },
+          {
+            "count": 26,
+            "dataCodewords": 24
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 12,
+            "dataCodewords": 15
+          },
+          {
+            "count": 28,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      50,
+      74,
+      98,
+      122
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 117
+          },
+          {
+            "count": 10,
+            "dataCodewords": 118
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 3,
+            "dataCodewords": 45
+          },
+          {
+            "count": 23,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 24
+          },
+          {
+            "count": 31,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 15
+          },
+          {
+            "count": 31,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      54,
+      78,
+      102,
+      126
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 7,
+            "dataCodewords": 116
+          },
+          {
+            "count": 7,
+            "dataCodewords": 117
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 21,
+            "dataCodewords": 45
+          },
+          {
+            "count": 7,
+            "dataCodewords": 46
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 1,
+            "dataCodewords": 23
+          },
+          {
+            "count": 37,
+            "dataCodewords": 24
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 15
+          },
+          {
+            "count": 26,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      52,
+      78,
+      104,
+      130
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 5,
+            "dataCodewords": 115
+          },
+          {
+            "count": 10,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 47
+          },
+          {
+            "count": 10,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 15,
+            "dataCodewords": 24
+          },
+          {
+            "count": 25,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 23,
+            "dataCodewords": 15
+          },
+          {
+            "count": 25,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      56,
+      82,
+      108,
+      134
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 13,
+            "dataCodewords": 115
+          },
+          {
+            "count": 3,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 46
+          },
+          {
+            "count": 29,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 42,
+            "dataCodewords": 24
+          },
+          {
+            "count": 1,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 23,
+            "dataCodewords": 15
+          },
+          {
+            "count": 28,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34,
+      60,
+      86,
+      112,
+      138
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 115
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 10,
+            "dataCodewords": 46
+          },
+          {
+            "count": 23,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 10,
+            "dataCodewords": 24
+          },
+          {
+            "count": 35,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 15
+          },
+          {
+            "count": 35,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      58,
+      86,
+      114,
+      142
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 115
+          },
+          {
+            "count": 1,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 14,
+            "dataCodewords": 46
+          },
+          {
+            "count": 21,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 29,
+            "dataCodewords": 24
+          },
+          {
+            "count": 19,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 11,
+            "dataCodewords": 15
+          },
+          {
+            "count": 46,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      34,
+      62,
+      90,
+      118,
+      146
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 13,
+            "dataCodewords": 115
+          },
+          {
+            "count": 6,
+            "dataCodewords": 116
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 14,
+            "dataCodewords": 46
+          },
+          {
+            "count": 23,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 44,
+            "dataCodewords": 24
+          },
+          {
+            "count": 7,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 59,
+            "dataCodewords": 16
+          },
+          {
+            "count": 1,
+            "dataCodewords": 17
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      54,
+      78,
+      102,
+      126,
+      150
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 12,
+            "dataCodewords": 121
+          },
+          {
+            "count": 7,
+            "dataCodewords": 122
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 12,
+            "dataCodewords": 47
+          },
+          {
+            "count": 26,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 39,
+            "dataCodewords": 24
+          },
+          {
+            "count": 14,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 22,
+            "dataCodewords": 15
+          },
+          {
+            "count": 41,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      24,
+      50,
+      76,
+      102,
+      128,
+      154
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 121
+          },
+          {
+            "count": 14,
+            "dataCodewords": 122
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 6,
+            "dataCodewords": 47
+          },
+          {
+            "count": 34,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 46,
+            "dataCodewords": 24
+          },
+          {
+            "count": 10,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 2,
+            "dataCodewords": 15
+          },
+          {
+            "count": 64,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      28,
+      54,
+      80,
+      106,
+      132,
+      158
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 17,
+            "dataCodewords": 122
+          },
+          {
+            "count": 4,
+            "dataCodewords": 123
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 29,
+            "dataCodewords": 46
+          },
+          {
+            "count": 14,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 49,
+            "dataCodewords": 24
+          },
+          {
+            "count": 10,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 24,
+            "dataCodewords": 15
+          },
+          {
+            "count": 46,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      32,
+      58,
+      84,
+      110,
+      136,
+      162
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 4,
+            "dataCodewords": 122
+          },
+          {
+            "count": 18,
+            "dataCodewords": 123
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 13,
+            "dataCodewords": 46
+          },
+          {
+            "count": 32,
+            "dataCodewords": 47
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 48,
+            "dataCodewords": 24
+          },
+          {
+            "count": 14,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 42,
+            "dataCodewords": 15
+          },
+          {
+            "count": 32,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      26,
+      54,
+      82,
+      110,
+      138,
+      166
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 20,
+            "dataCodewords": 117
+          },
+          {
+            "count": 4,
+            "dataCodewords": 118
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 40,
+            "dataCodewords": 47
+          },
+          {
+            "count": 7,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 43,
+            "dataCodewords": 24
+          },
+          {
+            "count": 22,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 10,
+            "dataCodewords": 15
+          },
+          {
+            "count": 67,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  },
+  {
+    "alignment": [
+      6,
+      30,
+      58,
+      86,
+      114,
+      142,
+      170
+    ],
+    "ecBlocks": [
+      {
+        "ecBlocks": [
+          {
+            "count": 19,
+            "dataCodewords": 118
+          },
+          {
+            "count": 6,
+            "dataCodewords": 119
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 18,
+            "dataCodewords": 47
+          },
+          {
+            "count": 31,
+            "dataCodewords": 48
+          }
+        ],
+        "ecCodewordsPerBlock": 28
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 34,
+            "dataCodewords": 24
+          },
+          {
+            "count": 34,
+            "dataCodewords": 25
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      },
+      {
+        "ecBlocks": [
+          {
+            "count": 20,
+            "dataCodewords": 15
+          },
+          {
+            "count": 61,
+            "dataCodewords": 16
+          }
+        ],
+        "ecCodewordsPerBlock": 30
+      }
+    ]
+  }
+]

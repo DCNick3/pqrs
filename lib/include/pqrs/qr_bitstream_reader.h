@@ -5,10 +5,13 @@
 #pragma once
 
 #include <pqrs/homography_dlt.h>
-#include <pqrs/dynamic_bitset.h>
 #include <pqrs/image.h>
 #include <pqrs/qr_decoder.h>
 
+#include <cstdint>
+#include <vector>
+
 namespace pqrs {
-    dynamic_bitset read_bitset(int version, qr_format format, std::function<bool(int, int)> const& sampler);
+    // Is there a better variant for abstracting for grid reader than passing std::function?
+    std::vector<std::uint8_t> read_raw_data(int version, qr_format format, std::function<bool(point2d)> const& sampler);
 }

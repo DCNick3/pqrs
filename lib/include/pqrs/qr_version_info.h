@@ -8,40 +8,56 @@
 #include <pqrs/qr_decoder.h>
 
 namespace pqrs {
-    struct block_info {
-        int _code_words_per_block, _data_codewords, _ecc_blocks;
 
-        constexpr inline block_info()
-                : _code_words_per_block(0), _data_codewords(0), _ecc_blocks(0)
+    struct ec_blocks_info {
+        struct ecb {
+            int _count;
+            int _data_codewords;
+        };
+
+        int _ec_code_words_per_block;
+
+        ecb _first_block_group;
+        std::optional<ecb> _second_block_group;
+
+        constexpr inline ec_blocks_info()
+                : _ec_code_words_per_block(0), _first_block_group(), _second_block_group()
         {}
 
-        constexpr inline block_info(int code_words_per_block, int data_codewords, int ecc_blocks)
-                : _code_words_per_block(code_words_per_block),
-                _data_codewords(data_codewords), _ecc_blocks(ecc_blocks)
+        constexpr inline ec_blocks_info(int ec_code_words_per_block, ecb first_block_group)
+                : _ec_code_words_per_block(ec_code_words_per_block), _first_block_group(first_block_group)
+        {}
+
+        constexpr inline ec_blocks_info(int ec_code_words_per_block, ecb first_block_group, ecb second_block_group)
+                : _ec_code_words_per_block(ec_code_words_per_block), _first_block_group(first_block_group),
+                    _second_block_group(second_block_group)
         {}
     };
 
     struct version_info {
         static constexpr int max_alignment = 7;
 
+        int _version_number;
+
         int _alignment_count;
         std::array<int, max_alignment> _alignment;
 
         int _total_code_words;
 
-        std::array<block_info, 4> _block_info;
+        std::array<ec_blocks_info, 4> _block_info;
 
         constexpr inline version_info()
-            : _alignment_count(0), _alignment(), _total_code_words(0)
+            : _version_number(0), _alignment_count(0), _alignment(), _total_code_words(0), _block_info()
         {}
 
-        [[nodiscard]] inline block_info const& level(error_level ecc) const {
+        [[nodiscard]] inline ec_blocks_info const& ec_blocks_for_level(error_level ecc) const {
             return _block_info[static_cast<int>(ecc)];
         }
 
-        constexpr inline version_info(int alignment_count, std::array<int, max_alignment> alignment,
-                                      int total_code_words, block_info l, block_info m, block_info q, block_info h)
-                : _alignment_count(alignment_count), _alignment(alignment), _total_code_words(total_code_words) {
+        constexpr inline version_info(int version_number, int alignment_count, std::array<int, max_alignment> alignment,
+                                      int total_code_words, ec_blocks_info l, ec_blocks_info m, ec_blocks_info q, ec_blocks_info h)
+                : _version_number(version_number), _alignment_count(alignment_count),
+                _alignment(alignment), _total_code_words(total_code_words), _block_info() {
             _block_info[static_cast<int>(error_level::L)] = l;
             _block_info[static_cast<int>(error_level::M)] = m;
             _block_info[static_cast<int>(error_level::Q)] = q;
