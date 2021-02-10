@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
         for (int i = -round * oversampling; i < (size + round) * oversampling; i++) {
             for (int j = -round * oversampling; j < (size + round) * oversampling; j++) {
                 im(j + round * oversampling, i + round * oversampling) = (std::uint8_t)
-                        pqrs::interpolate_bilinear(gray,
+                        pqrs::interpolate::bilinear(gray,
                                                    code._homography.map({
                                                        (float)i / (float)oversampling + .5f,
                                                        (float)j / (float)oversampling + .5f}));

@@ -49,14 +49,14 @@ namespace pqrs {
                 x = (float) a.x() + length * dy;
                 y = (float) a.y() - length * dx;
                 if (x >= 0 && y >= 0 && x <= width - 1 && y <= height - 1) {
-                    edge_outside += interpolate_bilinear(image, x, y);
+                    edge_outside += interpolate::bilinear(image, x, y);
                     total_outside++;
                 }
 
                 x = (float) a.x() - length * dy;
                 y = (float) a.y() + length * dx;
                 if (x >= 0 && y >= 0 && x <= width - 1 && y <= height - 1) {
-                    edge_inside += interpolate_bilinear(image, x, y);
+                    edge_inside += interpolate::bilinear(image, x, y);
                     total_inside++;
                 }
             }

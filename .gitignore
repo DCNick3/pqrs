@@ -1,3 +1,6 @@
 cmake-build-*
 .idea
 out
+.cproject
+.project
+build

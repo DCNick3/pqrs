@@ -7,9 +7,10 @@
 #include <pqrs/image.h>
 #include <pqrs/vector2d.h>
 
-namespace pqrs {
-    float interpolate_bilinear(gray_u8 const& image, float x, float y);
-    inline float interpolate_bilinear(gray_u8 const& image, vector2d p) {
-        return interpolate_bilinear(image, p.x(), p.y());
+namespace pqrs::interpolate {
+    float bilinear(gray_u8 const& image, float x, float y);
+
+    inline float bilinear(gray_u8 const& image, vector2d p) {
+    	return bilinear(image, p.x(), p.y());
     }
 }

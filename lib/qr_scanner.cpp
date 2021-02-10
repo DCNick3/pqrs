@@ -29,7 +29,7 @@ namespace pqrs {
 
             [[nodiscard]] bool sample(vector2d p) const {
                 p = _homography.map(p);
-                auto v = interpolate_bilinear(_image, p);
+                auto v = interpolate::bilinear(_image, p);
                 return v < (float) _threshold;
             }
 

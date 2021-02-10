@@ -18,6 +18,6 @@ add_library(pqrs STATIC
 target_link_libraries(pqrs PUBLIC xtensor sul::dynamic_bitset)
 target_include_directories(pqrs PUBLIC include)
 
-if (${CMAKE_BUILD_TYPE} EQUAL "DEBUG")
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     target_compile_definitions(pqrs PUBLIC -DXTENSOR_ENABLE_ASSERT -DXTENSOR_ENABLE_CHECK_DIMENSION)
 endif()
