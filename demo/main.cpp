@@ -13,7 +13,7 @@
 #include <pqrs/contour_edge_intensity.h>
 #include <pqrs/contour_to_tetragon.h>
 #include <pqrs/finder_pattern_detector.h>
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 #include <pqrs/homography_dlt.h>
 #include <pqrs/qr_scanner.h>
 #include <pqrs/qr_bitstream_reader.h>
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 
     auto qr_codes = pqrs::scan_qr_codes(gray, finder_patterns);
 
-    for (auto const& code : qr_codes) {
+    /*for (auto const& code : qr_codes) {
         int size = code.size();
         int oversampling = 1;
         int round = 2;
@@ -120,11 +120,11 @@ int main(int argc, char* argv[]) {
             }
         }
         ostream << pqrs::save_ppm(im);
-    }
+    }*/
 
     //ostream << pqrs::save_ppm(img);
 
 
 
-    return 0;
+    return qr_codes.empty() ? -1 : 0;
 }

@@ -9,15 +9,17 @@ add_library(pqrs STATIC
         contour_edge_intensity.cpp
         contour_to_tetragon.cpp
         finder_pattern_detector.cpp
-        qr_decoder.cpp
+        qr_ecc_decoder.cpp
         homography_dlt.cpp
         qr_scanner.cpp
         qr_version_info.cpp
         qr_bitstream_reader.cpp
+        qr_block_splitter.cpp
+        qr_bit_decoder.cpp
         )
 target_link_libraries(pqrs PUBLIC xtensor sul::dynamic_bitset)
 target_include_directories(pqrs PUBLIC include)
 
-if (${CMAKE_BUILD_TYPE} EQUAL "DEBUG")
-    target_compile_definitions(pqrs PUBLIC -DXTENSOR_ENABLE_ASSERT -DXTENSOR_ENABLE_CHECK_DIMENSION)
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    target_compile_definitions(pqrs PUBLIC -DXTENSOR_ENABLE_ASSERT -DXTENSOR_ENABLE_CHECK_DIMENSION -D_GLIBCXX_DEBUG)
 endif()

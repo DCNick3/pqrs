@@ -1,12 +1,11 @@
 //
-// Created by dcnick3 on 2/1/21.
+// Created by dcnick3 on 2/10/21.
 //
 
 #pragma once
 
-#include <pqrs/dynamic_bitset.h>
-
-#include <optional>
+#include <vector>
+#include <cstdint>
 
 namespace pqrs {
     enum class error_level {
@@ -29,8 +28,9 @@ namespace pqrs {
         error_level _error_level;
         mask_type _mask_type;
     };
-
-    std::optional<qr_format> try_decode_qr_format(dynamic_bitset const& bits);
-    std::optional<int> try_decode_qr_version(dynamic_bitset const& bits);
+    struct qr_block {
+        std::size_t _data_size;
+        std::vector<std::uint8_t> _data_and_ecc;
+    };
 
 }

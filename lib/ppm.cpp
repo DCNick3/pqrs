@@ -22,10 +22,11 @@ namespace pqrs {
 
         auto res = color_u8::from_shape({ height, width, 3 });
 
-        while (ss.get() == 10) ; // skip newlines
+        ss.get();
+        //while (ss.get() == 10) ; // skip newlines
         // TODO: support the format better: any whitespace should be skipped
         // Also, there are comments (GIMP actually emits them...)
-        ss.unget();
+        //ss.unget();
 
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
