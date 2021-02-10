@@ -29,7 +29,7 @@ namespace pqrs {
             for (int i = 0; i < samples.size(); i++) {
                 auto t = (float)(i - sample_period) / inside_size;
                 auto p = a * (1.f - t) + b * t;
-                samples[i] = interpolate::bilinear(image, p);
+                samples[i] = interpolate_bilinear(image, p);
             }
 
             // encode the samples as RLE
@@ -118,8 +118,8 @@ namespace pqrs {
                 auto p_outside = p + normal_vector * thresh_normal_distance;
                 auto p_inside = p - normal_vector * thresh_normal_distance;
 
-                sum_outside += interpolate::bilinear(gray, p_outside);
-                sum_inside += interpolate::bilinear(gray, p_inside);
+                sum_outside += interpolate_bilinear(gray, p_outside);
+                sum_inside += interpolate_bilinear(gray, p_inside);
             }
 
             total_sum_outside += sum_outside / thresh_number_of_samples;

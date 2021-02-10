@@ -4,9 +4,9 @@
 
 #include <pqrs/interpolation.h>
 
-namespace pqrs::interpolate {
+namespace pqrs {
 
-	float bilinear(gray_u8 const& image, float x, float y) {
+	float interpolate_bilinear(gray_u8 const& image, float x, float y) {
 		int h = image.shape(0), w = image.shape(1);
 
 		// clip x and y
