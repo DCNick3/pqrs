@@ -2,7 +2,7 @@
 // Created by dcnick3 on 2/1/21.
 //
 
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 #include <pqrs/util.h>
 #include <pqrs/qr_version_info.h>
 
@@ -12,6 +12,10 @@
 #include <optional>
 #include <algorithm>
 #include <utility>
+#include <iostream>
+#include <CLucene.h>
+
+// this one is much more inspired by zxing's ReedSolomonDecoder
 
 namespace pqrs {
 
@@ -134,6 +138,10 @@ namespace pqrs {
                 return exp_table[(log_table[x] * power) % max_value];
             }
 
+            static inline std::uint32_t log(std::uint32_t x) {
+                return log_table[x];
+            }
+
             static inline std::uint32_t inv(std::uint32_t x) {
                 return exp_table[max_value - log_table[x]];;
             }
@@ -160,6 +168,7 @@ namespace pqrs {
             inline gf_el operator/(gf_el o) const { return gf_el(GF::div(_value, o._value)); }
             inline gf_el pow(gf_el power) const { return gf_el(GF::pow(_value, power._value)); }
             inline gf_el inv() const { return gf_el(GF::inv(_value)); }
+            inline gf_el log() const { return gf_el(GF::log(_value)); }
 
             inline gf_el& operator+=(gf_el o) { return *this = *this + o; }
             inline gf_el& operator-=(gf_el o) { return *this = *this - o; }
@@ -173,17 +182,28 @@ namespace pqrs {
         template<typename EL>
         class poly {
             std::vector<EL> _elements;
-            inline explicit poly(std::size_t sz) : _elements(sz) { assert(sz > 0); }
-
+            inline explicit poly(std::size_t sz) : _elements(sz) {
+                assert(sz > 0);
+            }
             [[nodiscard]] std::size_t size() const { return _elements.size(); }
 
+            void normalize() {
+                // not very effective
+                while (_elements.size() > 1 && _elements[0] == EL::zero()) {
+                    _elements.erase(_elements.begin());
+                }
+            }
+
         public:
+
+            [[nodiscard]] std::size_t degree() const { return _elements.size() - 1; }
 
             static constexpr poly zero() { return poly({EL::zero()}); }
             static constexpr poly one() { return poly({EL::one()}); }
 
             inline explicit poly(std::vector<EL> elements) : _elements(std::move(elements)) {
                 assert(!_elements.empty());
+                normalize();
             }
 
             [[nodiscard]] inline poly operator*(EL a) const {
@@ -191,6 +211,7 @@ namespace pqrs {
                 std::transform(res._elements.begin(), res._elements.end(), res._elements.begin(), [&](auto el) {
                     return el * a;
                 });
+                res.normalize();
                 return res;
             }
 
@@ -203,6 +224,7 @@ namespace pqrs {
                     res._elements[i + res.size() - size()] += _elements[i];
                 for (int i = 0; i < o.size(); i++)
                     res._elements[i + res.size() - o.size()] += o._elements[i];
+                res.normalize();
                 return res;
             }
 
@@ -215,6 +237,7 @@ namespace pqrs {
                     res._elements[i + res.size() - size()] += _elements[i];
                 for (int i = 0; i < o.size(); i++)
                     res._elements[i + res.size() - o.size()] -= o._elements[i];
+                res.normalize();
                 return res;
             }
 
@@ -227,6 +250,7 @@ namespace pqrs {
                     for (int j = 0; j < o.size(); j++) {
                         res._elements[i + j] += _elements[i] * o._elements[j];
                     }
+                res.normalize();
                 return res;
             }
 
@@ -275,18 +299,94 @@ namespace pqrs {
                           remainder._elements.begin());
                 quotient._elements.resize(quotient.size() - remainder.size());
 
+                quotient.normalize();
+                remainder.normalize();
+
                 return std::make_pair(quotient, remainder);
             }
 
+            [[nodiscard]] inline EL operator[](int index) const { return _elements[index]; }
+
             [[nodiscard]] inline poly operator/(poly const& o) const { return divide(o).first; }
             [[nodiscard]] inline poly operator%(poly const& o) const { return divide(o).second; }
+
+            [[nodiscard]] inline EL get_coefficient(int degree) const {
+                return _elements[_elements.size() - 1 - degree];
+            }
+
+            [[nodiscard]] inline bool is_zero() const {
+                return std::all_of(_elements.begin(), _elements.end(), [](auto a){ return a == EL::zero(); });
+            }
 
             static inline poly generator(int nsym) {
                 poly res = one();
                 for (int i = 0; i < nsym; i++) {
                     res = res * poly({1, EL::alpha().pow(EL(i)) });
                 }
+                res.normalize();
                 return res;
+            }
+
+            static inline poly monomial(int degree, EL coefficient) {
+                assert(degree >= 0);
+                if (coefficient == EL::zero())
+                    return zero();
+                std::vector<EL> coef_vect(degree + 1);
+                coef_vect[0] = coefficient;
+                return poly(std::move(coef_vect));
+            }
+
+            static inline std::optional<std::pair<poly, poly>> euclidean_algorithm(poly a, poly b, int R) {
+                if (a.degree() < b.degree())
+                    std::swap(a, b);
+
+                poly r_last = a;
+                poly r = b;
+                poly t_last = poly::zero();
+                poly t = poly::one();
+
+                // Run Euclidean algorithm until r's degree is less than R/2
+                while (r.degree() >= R / 2) {
+                    auto r_last_last = r_last;
+                    auto t_last_last = t_last;
+                    r_last = r;
+                    t_last = t;
+
+                    // Divide r_last_last by r_last, with quotient in q and remainder in r
+                    if (r_last.is_zero()) {
+                        // Oops, Euclidean algorithm already terminated?
+                        return {};
+                        //throw new ReedSolomonException("r_{i-1} was zero");
+                    }
+                    r = r_last_last;
+                    poly q = zero();
+                    auto denominator_leading_term = r_last.get_coefficient(r_last.degree());
+                    auto dlt_inverse = denominator_leading_term.inv();
+                    while (r.degree() >= r_last.degree() && !r.is_zero()) {
+                        int degree_diff = r.degree() - r_last.degree();
+                        auto scale = r.get_coefficient(r.degree()) * dlt_inverse;
+                        q = q + monomial(degree_diff, scale);
+                        r = r + r_last * monomial(degree_diff, scale);
+                    }
+
+                    t = q * t_last + t_last_last;
+
+                    if (r.degree() >= r_last.degree()) {
+                        std::terminate();
+                        //throw new IllegalStateException("Division algorithm failed to reduce polynomial?");
+                    }
+                }
+
+                auto sigma_tilde_at_zero = t.get_coefficient(0);
+                if (sigma_tilde_at_zero == EL::zero()) {
+                    return {};
+                    //throw new ReedSolomonException("sigmaTilde(0) was zero");
+                }
+
+                auto inverse = sigma_tilde_at_zero.inv();
+                auto sigma = t * inverse;
+                auto omega = r * inverse;
+                return {{sigma, omega}};
             }
         };
 
@@ -343,6 +443,43 @@ namespace pqrs {
             }
             return best_message;
         }
+
+        std::optional<std::vector<qr_gf_el>> find_error_locations(qr_gf_el_poly const& error_locator) {
+            auto num_errors = error_locator.degree();
+            if (num_errors == 1) {
+                return {{ error_locator.get_coefficient(1) }};
+            }
+            std::vector<qr_gf_el> result(num_errors);
+            int e = 0;
+            for (int i = 1; i < 256 && e < num_errors; i++) {
+                if (error_locator(qr_gf_el(i)) == qr_gf_el::zero()) {
+                    result[e] = qr_gf_el(i).inv();
+                    e++;
+                }
+            }
+            if (e != num_errors) {
+                return {};
+                //throw new ReedSolomonException("Error locator degree does not match number of roots");
+            }
+            return result;
+        }
+
+        std::optional<std::vector<qr_gf_el>> find_error_magnitudes(qr_gf_el_poly const& error_evaluator,
+                                                              std::vector<qr_gf_el> const& error_locations) {
+            // This is directly applying Forney's Formula
+            auto s = error_locations.size();
+            std::vector<qr_gf_el> result(s);
+            for (int i = 0; i < s; i++) {
+                auto xiInverse = error_locations[i].inv();
+                auto denominator = qr_gf_el::one();
+                for (int j = 0; j < s; j++) {
+                    if (i != j)
+                        denominator = denominator * (error_locations[j] * xiInverse + qr_gf_el::one());
+                }
+                result[i] = error_evaluator(xiInverse) * denominator.inv();
+            }
+            return result;
+        }
     }
 
     std::optional<qr_format> try_decode_qr_format(dynamic_bitset const& bits) {
@@ -385,6 +522,59 @@ namespace pqrs {
             return {};
 
         return *message;
+    }
+
+    bool correct_qr_errors(qr_block &block) {
+        auto two_s = block._data_and_ecc.size() - block._data_size;
+
+        std::vector<qr_gf_el> poly_data;
+        poly_data.reserve(block._data_and_ecc.size());
+        for (auto e : block._data_and_ecc)
+            poly_data.emplace_back(e);
+
+
+        auto no_error = true;
+        std::vector<qr_gf_el> syndrome_coefficients(two_s);
+        {
+            qr_gf_el_poly poly(poly_data);
+            for (int i = 0; i < syndrome_coefficients.size(); i++) {
+                auto eval = poly(qr_gf_el::alpha().pow(qr_gf_el(i)));
+                if (eval != qr_gf_el::zero()) {
+                    no_error = false;
+                }
+                *(syndrome_coefficients.rbegin() + i) = eval;
+            }
+        }
+
+        if (no_error)
+            return true;
+
+        qr_gf_el_poly syndrome_poly(std::move(syndrome_coefficients));
+
+        auto res = qr_gf_el_poly::euclidean_algorithm(qr_gf_el_poly::monomial(two_s, qr_gf_el::one()), syndrome_poly, two_s);
+        if (!res)
+            return false;
+        auto [sigma, omega] = *res;
+        auto error_locations_opt = find_error_locations(sigma);
+        if (!error_locations_opt)
+            return false;
+        auto error_magnitudes_opt = find_error_magnitudes(omega, *error_locations_opt);
+        if (!error_magnitudes_opt)
+            return false;
+
+        for (int i = 0; i < error_locations_opt->size(); i++) {
+            int position = poly_data.size() - 1 - (*error_locations_opt)[i].log().value();
+            if (position < 0)
+                // throw new ReedSolomonException("Bad error location");
+                return false;
+            poly_data[position] -= (*error_magnitudes_opt)[i];
+        }
+
+        for (int i = 0; i < block._data_size; i++) {
+            block._data_and_ecc[i] = poly_data[i].value();
+        }
+
+        return true;
     }
 
 }

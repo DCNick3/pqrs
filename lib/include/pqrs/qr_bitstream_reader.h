@@ -6,7 +6,7 @@
 
 #include <pqrs/homography_dlt.h>
 #include <pqrs/image.h>
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 
 #include <cstdint>
 #include <vector>

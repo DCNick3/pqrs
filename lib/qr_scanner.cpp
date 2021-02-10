@@ -3,8 +3,10 @@
 //
 
 #include <pqrs/qr_scanner.h>
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 #include <pqrs/qr_bitstream_reader.h>
+#include <pqrs/qr_block_splitter.h>
+#include <pqrs/qr_version_info.h>
 #include <pqrs/homography_dlt.h>
 #include <pqrs/interpolation.h>
 #include <pqrs/direction4.h>
@@ -471,11 +473,32 @@ namespace pqrs {
 
             // TODO: detect alignment patterns to add more features for homography
 
-            /*auto grid = candidate.make_grid(image);
+            auto grid = candidate.make_grid(image);
 
             auto raw_data = read_raw_data(*candidate.version, *candidate.format, [&](point2d p) {
                 return grid.sample((float)p.x() + .5f , (float)p.y() + .5f);
-            });*/
+            });
+
+            auto const& version_info = get_version_info(*candidate.version);
+            auto const& level_info = version_info.ec_blocks_for_level(candidate.format->_error_level);
+
+            auto blocks = split_blocks(raw_data, *candidate.version, candidate.format->_error_level);
+
+            std::vector<uint8_t> corrected_data;
+            corrected_data.reserve(level_info.get_total_data_codewords());
+
+            bool err = false;
+            for (auto& block : blocks) {
+                if (!correct_qr_errors(block)) {
+                    err = true;
+                    break;
+                }
+                corrected_data.insert(corrected_data.end(), block._data_and_ecc.begin(),
+                                      block._data_and_ecc.begin() + block._data_size);
+            }
+
+            if (err)
+                continue;
 
             res.emplace_back(*candidate.version, *candidate.format, candidate.make_homography());
         }

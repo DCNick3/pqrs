@@ -5,7 +5,7 @@
 #pragma once
 
 #include <pqrs/point2d.h>
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 
 namespace pqrs {
 
@@ -32,6 +32,11 @@ namespace pqrs {
                 : _ec_code_words_per_block(ec_code_words_per_block), _first_block_group(first_block_group),
                     _second_block_group(second_block_group)
         {}
+
+        [[nodiscard]] inline int get_total_data_codewords() const {
+            return _first_block_group._data_codewords * _first_block_group._count +
+                    (_second_block_group ? _second_block_group->_data_codewords * _second_block_group->_count : 0);
+        }
     };
 
     struct version_info {
@@ -64,7 +69,7 @@ namespace pqrs {
             _block_info[static_cast<int>(error_level::H)] = h;
         }
 
-        [[nodiscard]] std::vector<point2d> alignment_locations() const {
+        [[nodiscard]] inline std::vector<point2d> alignment_locations() const {
             std::vector<point2d> res;
             for (int row = 0; row < _alignment_count; row++)
                 for (int col = 0; col < _alignment_count; col++) {

@@ -7,7 +7,7 @@
 #include <pqrs/image.h>
 #include <pqrs/finder_pattern_detector.h>
 #include <pqrs/homography_dlt.h>
-#include <pqrs/qr_decoder.h>
+#include <pqrs/qr_ecc_decoder.h>
 
 #include <utility>
 

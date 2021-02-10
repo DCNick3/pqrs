@@ -141,9 +141,8 @@ namespace pqrs {
                     throw std::runtime_error("Not enough data in the qr code. qr_version_info bug?");
                 }
 
-
                 if (!function_module_mask.used(pos_old.x(), pos_old.y())) {
-                    std::cerr << index++ << ": { " << pos_old.x() << ", " << pos_old.y() << " }\n";
+                    //std::cerr << index++ << ": { " << pos_old.x() << ", " << pos_old.y() << " }\n";
                     // xor with mask
                     return sampler(pos_old) != mask(pos_old);
                 }
@@ -154,7 +153,7 @@ namespace pqrs {
         for (int i = 0; i < verinf._total_code_words; i++) {
             std::uint8_t cw = 0;
 
-            for (int j = 0; j < 8; j++) {
+            for (int j = 7; j >= 0; j--) {
                 cw |= read_bit() ? (1U << j) : 0;
             }
 

@@ -915,6 +915,12 @@ namespace pqrs {
             ret.emplace_back(contour[i]);
         }
 
+        for (int i = 0; i < ret.size(); i++) {
+            // if we got any duplicate corners as a result of refinement - bail out
+            if (ret[i] == ret[(i + 1) % ret.size()])
+                return {};
+        }
+
         remove_bias(ret);
 
         if (!is_polygon_cw(ret))
