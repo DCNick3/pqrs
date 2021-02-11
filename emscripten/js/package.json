@@ -1,0 +1,17 @@
+{
+  "name": "pqrs-js",
+  "scripts": {
+    "build": "webpack",
+    "build-prod": "webpack --mode=production",
+    "serve": "http-server",
+    "start": "npm run build && npm run serve"
+  },
+  "devDependencies": {
+    "exports-loader": "^2.0.0",
+    "file-loader": "^6.2.0",
+    "http-server": "^0.12.3",
+    "null-loader": "^4.0.1",
+    "webpack": "~5.21.2",
+    "webpack-cli": "^4.5.0"
+  }
+}

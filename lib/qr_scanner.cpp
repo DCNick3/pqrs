@@ -7,6 +7,7 @@
 #include <pqrs/qr_bitstream_reader.h>
 #include <pqrs/qr_block_splitter.h>
 #include <pqrs/qr_version_info.h>
+#include <pqrs/qr_bit_decoder.h>
 #include <pqrs/homography_dlt.h>
 #include <pqrs/interpolation.h>
 #include <pqrs/direction4.h>
@@ -500,7 +501,12 @@ namespace pqrs {
             if (err)
                 continue;
 
-            res.emplace_back(*candidate.version, *candidate.format, candidate.make_homography());
+            auto str = decode_bits(corrected_data, *candidate.version);
+
+            if (!str)
+                continue;
+
+            res.emplace_back(*candidate.version, *candidate.format, candidate.make_homography(), *str);
         }
 
         return res;

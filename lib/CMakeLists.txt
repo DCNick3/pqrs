@@ -16,6 +16,7 @@ add_library(pqrs STATIC
         qr_bitstream_reader.cpp
         qr_block_splitter.cpp
         qr_bit_decoder.cpp
+        qr_easy_pipeline.cpp
         )
 target_link_libraries(pqrs PUBLIC xtensor sul::dynamic_bitset)
 target_include_directories(pqrs PUBLIC include)
