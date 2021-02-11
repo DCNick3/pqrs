@@ -16,7 +16,16 @@ class Metrics:
 		else:
 			self.data[image_path] = [dictionary]
 
+	def print_verbose(self):
+		for path, item in self.data.items():
+
+			for el in item:
+				print(f"{el['image_path']}: {el['returncode']}")
+
+
 	def print(self, verbose=False):
+		if verbose: return self.print_verbose()
+
 		for path, item in self.data.items():
 			print(f"{path}:")
 
