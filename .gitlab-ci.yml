@@ -16,6 +16,7 @@ build_js:
     - mkdir emscripten/js/bin/
     - cp -r build/emscripten/cpp/pqrs-emscripten* emscripten/js/bin/
     - cd emscripten/js
+    - npm install
     - npm run-script build-prod
     - cp -r dist ../..
   artifacts:
