@@ -53,7 +53,7 @@ def main(program, dataset_path):
 
 
 
-parser = argparse.ArgumentParser(description="Testbanch", add_help=True)
+parser = argparse.ArgumentParser(description="Testbench", add_help=True)
 parser.add_argument("-v", "--verbose", action="store_true", help="show more output")
 parser.add_argument("PROGRAM", type=str, help="path to program you want to test")
 parser.add_argument("DATASET_PATH", type=str, help="path to dataset")
