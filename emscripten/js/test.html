@@ -108,7 +108,7 @@
         const t0 = performance.now();
         //console.time('scan');
 
-        const codes = await pqrs.default.scan_qr(imageData);
+        const codes = await pqrs.scan_qr(imageData);
         
         //console.timeEnd('scan')
         const t1 = performance.now();

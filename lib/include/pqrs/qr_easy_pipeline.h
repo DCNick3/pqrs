@@ -6,12 +6,18 @@
 
 #include <pqrs/image.h>
 #include <pqrs/qr.h>
+#include <pqrs/finder_pattern_detector.h>
 
 #include <vector>
 
 namespace pqrs {
-    std::vector<scanned_qr> easy_scan_qr_codes(gray_u8 const& image);
+    struct easy_scan_result {
+        std::vector<finder_pattern> finder_patterns;
+        std::vector<scanned_qr> qrs;
+    };
+
+    easy_scan_result easy_scan_qr_codes(gray_u8 const& image);
 
     // take ownership so that we will be able to delete the original image after converting to grayscale
-    std::vector<scanned_qr> easy_scan_qr_codes(color_u8 image);
+    easy_scan_result easy_scan_qr_codes(color_u8 image);
 }

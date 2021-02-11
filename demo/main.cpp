@@ -32,9 +32,9 @@ int main(int argc, char* argv[]) {
 
     auto img = pqrs::load_ppm(ppm);
 
-    auto qr_codes = pqrs::easy_scan_qr_codes(std::move(img));
+    auto result = pqrs::easy_scan_qr_codes(std::move(img));
 
-    for (auto const& qr : qr_codes) {
+    for (auto const& qr : result.qrs) {
         auto const& c = qr._decoded_content;
         std::string https = "https://";
         if (c.size() >= https.size() && c.substr(0, https.size()) == https) {

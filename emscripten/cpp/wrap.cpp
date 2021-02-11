@@ -29,18 +29,23 @@ std::string scan_qr_codes(std::uint32_t data_ptr,
     // can we do better?
     pqrs::coloralpha_u8 b = a;
 
-    auto qrs = pqrs::easy_scan_qr_codes(std::move(b));
+    auto result = pqrs::easy_scan_qr_codes(std::move(b));
 
     // serialize output
     // embind does not (adequately) support vectors, so just use json here
 
-    json11::Json::array array;
+    json11::Json::array res_qrs;
+    json11::Json::array res_finders;
 
     auto vec = [](pqrs::vector2d vec) -> json11::Json {
         return json11::Json::array { vec.x(), vec.y() };
     };
 
-    for (auto const& q : qrs) {
+    for (auto const& finder : result.finder_patterns) {
+        res_finders.push_back(vec(finder.center));
+    }
+
+    for (auto const& q : result.qrs) {
         json11::Json::object obj;
 
         auto const& content = q._decoded_content;
@@ -51,10 +56,14 @@ std::string scan_qr_codes(std::uint32_t data_ptr,
         obj.emplace("top_left", vec(q.top_left()));
         obj.emplace("top_right", vec(q.top_right()));
 
-        array.push_back(obj);
+        res_qrs.push_back(obj);
     }
 
-    return json11::Json(array).dump();
+    json11::Json::object res;
+    res.emplace("qrs", res_qrs);
+    res.emplace("finders", res_finders);
+
+    return json11::Json(res).dump();
 }
 
 EMSCRIPTEN_BINDINGS(pqrs) {

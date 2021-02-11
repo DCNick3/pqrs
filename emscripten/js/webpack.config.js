@@ -22,6 +22,7 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         filename: "pqrs-js.js",
         libraryTarget: "var",
+        libraryExport: "default",
         library: 'pqrs'
     },
     module: {

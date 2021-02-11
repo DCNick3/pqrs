@@ -1,0 +1,24 @@
+
+stages:
+  - build
+
+build_js:
+  image: emscripten/emsdk
+  stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - mkdir build
+    - cd build
+    - emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+    - make
+    - cd ..
+    - mkdir emscripten/js/bin/
+    - cp -r build/emscripten/cpp/pqrs-emscripten* emscripten/js/bin/
+    - cd emscripten/js
+    - npm run-script build-prod
+    - cp -r dist ../..
+  artifacts:
+    paths:
+      - dist
+

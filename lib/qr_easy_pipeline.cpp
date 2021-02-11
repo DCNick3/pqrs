@@ -13,7 +13,7 @@
 
 namespace pqrs {
 
-    std::vector<scanned_qr> easy_scan_qr_codes(pqrs::gray_u8 const& gray) {
+    easy_scan_result easy_scan_qr_codes(pqrs::gray_u8 const& gray) {
         std::vector<pqrs::finder_pattern> finder_patterns;
         {
             auto bin = pqrs::binarize(gray, 0.005);
@@ -35,11 +35,11 @@ namespace pqrs {
             }
         }
 
-        return pqrs::scan_qr_codes(gray, finder_patterns);
+        return {finder_patterns, pqrs::scan_qr_codes(gray, finder_patterns)};
     }
 
     // take ownership so that we will be able to delete the original image after converting to grayscale
-    std::vector<scanned_qr> easy_scan_qr_codes(color_u8 image) {
+    easy_scan_result easy_scan_qr_codes(color_u8 image) {
         auto gray = pqrs::grayscale(image);
 
         image.resize({0, 0, 0});
