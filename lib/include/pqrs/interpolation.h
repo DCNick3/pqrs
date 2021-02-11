@@ -9,7 +9,8 @@
 
 namespace pqrs {
     float interpolate_bilinear(gray_u8 const& image, float x, float y);
+
     inline float interpolate_bilinear(gray_u8 const& image, vector2d p) {
-        return interpolate_bilinear(image, p.x(), p.y());
+    	return interpolate_bilinear(image, p.x(), p.y());
     }
 }

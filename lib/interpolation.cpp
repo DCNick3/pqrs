@@ -4,42 +4,29 @@
 
 #include <pqrs/interpolation.h>
 
-// bilinear interpolation
-
 namespace pqrs {
-    namespace {
-        inline float interp(std::uint8_t a, std::uint8_t b, std::uint8_t c, std::uint8_t d,
-                            float ax, float ay) {
-            float val = (1.0f - ax) * (1.0f - ay) * (float)a; // (x,y)
-            val += ax * (1.0f - ay) * (float)b; // (x+1,y)
-            val += ax * ay * (float)c; // (x+1,y+1)
-            val += (1.0f - ax) * ay * (float)d; // (x,y+1)
 
-            return val;
-        }
+	float interpolate_bilinear(gray_u8 const& image, float x, float y) {
+		int h = image.shape(0), w = image.shape(1);
 
-        template<typename Getter>
-        inline float impl(Getter const& getter, float x, float y) {
-            int xt = (int)x;
-            int yt = (int)y;
-            return interp(getter(yt, xt), getter(yt, xt + 1), getter(yt + 1, xt + 1), getter(yt + 1, xt),
-                          x - (float) xt, y - (float) yt);
-        }
-    }
+		// clip x and y
+		x = x < 0 ? 0 : x > w-1 ? w-1 : x;
+		y = y < 0 ? 0 : y > h-1 ? h-1 : y;
 
-    float interpolate_bilinear(gray_u8 const& image, float x, float y) {
-        if (x < 0 || y < 0 || x > image.shape(1) - 2.f || y > image.shape(0) - 2.f) {
-            auto get = [&](int j, int i) -> float {
-                i = std::max(0, i);
-                j = std::max(0, j);
-                i = std::min(i, (int)image.shape(1) - 1);
-                j = std::min(j, (int)image.shape(0) - 1);
-                return image(j, i);
-            };
+		// find source points
+		int p1x = x, p1y = y;
+		int p2x = std::min(p1x+1, w-1);
+		int p2y = std::min(p1y+1, h-1);
 
-            return impl(get, x, y);
-        }
+		// find offset inside one pixel
+		float dx = x - p1x;
+		float dy = y - p1y;
 
-        return impl(image, x, y);
-    }
+		// find color of intermediate points
+		float res1 = image(p1y, p1x) * (1 - dx) + image(p1y, p2x) * dx;
+		float res2 = image(p2y, p1x) * (1 - dx) + image(p2y, p2x) * dx;
+
+		// find color of result point
+		return res1 * (1 - dy) + res2 * dy;
+	}
 }
