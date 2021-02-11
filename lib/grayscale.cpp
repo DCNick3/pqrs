@@ -7,7 +7,7 @@
 namespace pqrs {
     gray_u8 grayscale(color_u8 const& color) {
         assert(color.shape().size() == 3);
-        assert(color.shape(2) == 3);
+        assert(color.shape(2) == 3 || color.shape(2) == 4);
         auto res = gray_u8::from_shape({color.shape(0), color.shape(1)});
 
         for (int j = 0; j < color.shape(0); j++)

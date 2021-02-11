@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <pqrs/homography_dlt.h>
+
 #include <vector>
 #include <cstdint>
 
@@ -31,6 +33,39 @@ namespace pqrs {
     struct qr_block {
         std::size_t _data_size;
         std::vector<std::uint8_t> _data_and_ecc;
+    };
+
+    struct scanned_qr {
+        int _version{};
+        qr_format _format;
+        homography _homography;
+
+        std::string _decoded_content;
+
+        [[nodiscard]] inline int size() const {
+            return 17 + _version * 4;
+        }
+
+        [[nodiscard]] vector2d top_left() const {
+            return _homography.map({0, 0});
+        }
+
+        [[nodiscard]] vector2d top_right() const {
+            return _homography.map({(float)size(), 0});
+        }
+
+        [[nodiscard]] vector2d bottom_left() const {
+            return _homography.map({0, (float)size()});
+        }
+
+        [[nodiscard]] vector2d bottom_right() const {
+            return _homography.map({(float)size(), (float)size()});
+        }
+
+        inline scanned_qr(int version, const qr_format &format, homography homography,
+                          std::string decoded_content)
+                : _version(version), _format(format),
+                  _homography(std::move(homography)), _decoded_content(std::move(decoded_content)) {}
     };
 
 }

@@ -10,4 +10,5 @@
 
 namespace pqrs {
     gray_u8 grayscale(color_u8 const& color);
+    gray_u8 grayscale(coloralpha_u8 const& color);
 }
