@@ -38,8 +38,8 @@ def folder_statistics(metrics):
 	res = metrics.split_by_folders()
 
 
-	for k, v in res.items():
-		positive = len(v.filter(lambda k, v: v["return_code"] == 0)) / len(v)
+	for k, item in res.items():
+		positive = len(item.filter(lambda k, v: v["return_code"] == 0)) / len(item)
 		print(f"\t{k}: %.1f%%" % (positive * 100))
 
 
