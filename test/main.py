@@ -13,7 +13,7 @@ from datetime import datetime
 from metrics import Metrics
 
 
-def process(program, dataset_path):
+def process(program, dataset_path, metrics):
 	# Make all path absolute
 	dataset_path = dataset_path.absolute()
 	program = program.absolute()
@@ -24,9 +24,6 @@ def process(program, dataset_path):
 
 	if not all_files:
 		raise RuntimeError(f"dataset '{dataset_path}' is empty")
-
-	# Metrics object will store all collected data
-	metrics = Metrics()
 
 	for i, file in enumerate(tqdm(all_files, leave=False)):
 
@@ -64,6 +61,7 @@ def process(program, dataset_path):
 
 parser = argparse.ArgumentParser(description="Testbench", add_help=True)
 parser.add_argument("-o", "--output-file", type=str, metavar="FILE_NAME", help="specify name of the output file")
+parser.add_argument("-m", "--message", type=str, metavar="<msg>", help="add message to file")
 parser.add_argument("PROGRAM", type=str, help="path to program you want to test")
 parser.add_argument("DATASET_PATH", type=str, help="path to dataset")
 args = parser.parse_args()
@@ -90,7 +88,10 @@ if not dataset_path.is_dir():
 if not program.is_file():
 	raise RuntimeError(f"'{program}' is not a file")
 
-print(f"Save result to {output_file}")
+# Metrics object will store all collected data
+metrics = Metrics(comment=args.message)
 
-res = process(program, dataset_path)
+res = process(program, dataset_path, metrics)
+
+print(f"Save result to {output_file}")
 res.save(output_file)
