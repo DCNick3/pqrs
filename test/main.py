@@ -68,7 +68,7 @@ args = parser.parse_args()
 
 
 if args.output_file is None:
-	output_file = datetime.now().strftime("metrics_results/%Y%m%d_%H%M%S_%f.pkl")
+	output_file = datetime.now().strftime("metrics_results/%Y%m%d_%H%M%S_%f.mtr")
 	output_file = Path(__file__).absolute().parent.joinpath(output_file)
 else:
 	output_file = Path(args.output_file).absolute()

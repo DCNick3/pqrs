@@ -1,4 +1,5 @@
 import os.path
+import zlib
 import pickle
 from collections import defaultdict
 from datetime import datetime
@@ -33,11 +34,11 @@ class Metrics:
 		data = {"data": self.data, "info": self.info}
 
 		with open(file_name, "wb") as f:
-			pickle.dump(data, f)
+			f.write(zlib.compress(pickle.dumps(data), level=9))
 
 	def load(self, file_name):
 		with open(file_name, "rb") as f:
-			data = pickle.load(f)
+			data = pickle.loads(zlib.decompress(f.read()))
 
 		self.data = data["data"]
 		self.info = data["info"]
