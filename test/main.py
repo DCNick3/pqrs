@@ -1,63 +1,112 @@
 #!/usr/bin/env python3
 
-import io
 import time
 from pathlib import Path
 from tqdm import tqdm
-import PIL
-from PIL import Image
 import argparse
 import subprocess
+from datetime import datetime
+import numpy as np
+import zlib
+import pickle
+import base64
+import os
+import fcntl
 
 from metrics import Metrics
 
 
-def main(program, dataset_path):
-	all_files = [p for p in dataset_path.rglob("*.*")]  # .
-	all_files.sort()
+def set_non_block(output):
+    fd = output.fileno()
+    fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+    fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
 
-	if not all_files:
-		raise RuntimeError(f"dataset '{dataset_path}' is empty")
 
-	metrics = Metrics()
+def read_line(p):
+	res = p.stdout.readline()
+	if not res: return None
+	res = res.decode().strip("\n")
+	return pickle.loads(zlib.decompress(base64.b64decode(res)))
 
-	with tqdm(total=len(all_files), leave=False) as pbar:
-		for i, file in enumerate(all_files):
-			pbar.n = i
-			pbar.refresh()
+def write(p, s):
+	p.stdin.write(f"{s}\n".encode())
+	p.stdin.flush()
 
-			try:
-				img = Image.open(file)
-			except PIL.UnidentifiedImageError as e:
-				continue
 
-			with io.BytesIO() as output:
-				img.save(output, format="PPM")
-				img_ppm = output.getvalue()
+def process(program, dataset_path, metrics, jobs=1):
+	# Make all path absolute
+	dataset_path = dataset_path.absolute()
+	program = program.absolute()
 
-			start_time = time.perf_counter_ns()
-			p = subprocess.Popen([str(program.absolute()), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			(stdout, stderr) = p.communicate(input=img_ppm)
-			returncode = p.wait()
-			end_time = time.perf_counter_ns()
-			
-			metrics.append({
-				"image_path": str(file.relative_to(dataset_path)),
-				"stdout": stdout,
-				"stderr": stderr,
-				"returncode": returncode,
-				"process_time_ns": end_time - start_time,
-				})
+	# Find all files in dataset
+	all_files = list(dataset_path.rglob("*.*"))
+	np.random.shuffle(all_files)
 
-	metrics.print(verbose=args.verbose)
+	assert len(all_files) > 2 * jobs
 
+	processes = []
+	for i in range(jobs):
+		p = subprocess.Popen(["./worker.py", str(program), str(dataset_path)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		set_non_block(p.stdout)
+		processes.append(p)
+		write(p, all_files[0])
+		write(p, all_files[1])
+		all_files = all_files[2:]
+
+
+	processes_i = 0
+	for file in tqdm(all_files):
+		while True:
+			p = processes[processes_i]
+			res = read_line(p)
+			if res is not None: break
+			processes_i = (processes_i + 1) % len(processes)
+			# time.sleep(0.01)
+
+		write(p, file)
+
+		if isinstance(res, dict):
+			metrics.append(res)
+		else:
+			print(res)
+
+	for p in processes:
+		for i in range(2):
+			while True:
+				res = read_line(p)
+				if res is not None: break
+				time.sleep(0.1)
+
+			if isinstance(res, dict):
+				metrics.append(res)
+			else:
+				print(res)
+
+		stdout, _ = p.communicate()
+		p.wait()
+	
 
 
 parser = argparse.ArgumentParser(description="Testbench", add_help=True)
-parser.add_argument("-v", "--verbose", action="store_true", help="show more output")
+parser.add_argument("-o", "--output-file", type=str, metavar="FILE_NAME", help="specify name of the output file")
+parser.add_argument("-m", "--message", type=str, metavar="msg", help="add message to file")
+parser.add_argument("-j", "--jobs", type=int, default=1, metavar="jobs", help="specifies the number of jobs (commands) to run simultaneously")
 parser.add_argument("PROGRAM", type=str, help="path to program you want to test")
 parser.add_argument("DATASET_PATH", type=str, help="path to dataset")
 args = parser.parse_args()
+
+
+if args.output_file is None:
+	output_file = datetime.now().strftime("metrics_results/%Y%m%d_%H%M%S_%f.mtr")
+	output_file = Path(__file__).absolute().parent.joinpath(output_file)
+else:
+	output_file = Path(args.output_file).absolute()
+
+if output_file.is_file():
+	raise RuntimeError("Output file already exist")
+
+if not output_file.parent.is_dir():
+	raise RuntimeError(f"Directory {output_file.parent} do not exist")
 
 program = Path(args.PROGRAM)
 dataset_path = Path(args.DATASET_PATH)
@@ -68,4 +117,11 @@ if not dataset_path.is_dir():
 if not program.is_file():
 	raise RuntimeError(f"'{program}' is not a file")
 
-main(program, dataset_path)
+# Metrics object will store all collected data
+metrics = Metrics(comment=args.message)
+process(program, dataset_path, metrics, args.jobs)
+
+print(f"Save result to {output_file}")
+
+with open(output_file, "wb") as f:
+	Metrics.dump(metrics, f)
