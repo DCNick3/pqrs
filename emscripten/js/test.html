@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <title>jsQR Demo</title>
-  <script src="dist/bundle.js"></script> 
+  <script src="dist/pqrs-js.js"></script> 
   <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
   <style>
     body {
@@ -123,12 +123,12 @@
           inversionAttempts: "dontInvert",
         });*/
 
-        if (codes.length == 0) {
+        if (codes.qrs.length == 0) {
           outputMessage.hidden = false;
           outputData.parentElement.hidden = true;
         } else {
           outputData.innerText = "";
-          for (const code of codes) {
+          for (const code of codes.qrs) {
             drawLine(code.top_left, code.top_right, "#FF3B58");
             drawLine(code.top_right, code.bottom_right, "#FF3B58");
             drawLine(code.bottom_right, code.bottom_left, "#FF3B58");

@@ -40,7 +40,7 @@ namespace pqrs {
         qr_format _format;
         homography _homography;
 
-        std::string _decoded_content;
+        std::optional<std::string> _decoded_content;
 
         [[nodiscard]] inline int size() const {
             return 17 + _version * 4;
@@ -61,6 +61,10 @@ namespace pqrs {
         [[nodiscard]] vector2d bottom_right() const {
             return _homography.map({(float)size(), (float)size()});
         }
+
+        inline scanned_qr(int version, const qr_format &format, homography homography)
+                : _version(version), _format(format),
+                  _homography(std::move(homography)) {}
 
         inline scanned_qr(int version, const qr_format &format, homography homography,
                           std::string decoded_content)

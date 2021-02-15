@@ -14,7 +14,7 @@ add_subdirectory(ext-deps/dynamic_bitset)
 add_subdirectory(ext-deps/json11)
 
 add_subdirectory(lib)
-add_subdirectory(demo)
+add_subdirectory(bin)
 
 if (EMSCRIPTEN)
     message("EMSCRIPTEN DETECTED!!")

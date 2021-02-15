@@ -498,15 +498,17 @@ namespace pqrs {
                                       block._data_and_ecc.begin() + block._data_size);
             }
 
-            if (err)
-                continue;
+            if (!err) {
+                auto str = decode_bits(corrected_data, *candidate.version);
 
-            auto str = decode_bits(corrected_data, *candidate.version);
+                if (str) {
+                    res.emplace_back(*candidate.version, *candidate.format, grid._homography, *str);
+                    continue;
+                }
+            }
 
-            if (!str)
-                continue;
-
-            res.emplace_back(*candidate.version, *candidate.format, candidate.make_homography(), *str);
+            // put the result, but without the decoded result (that failed)
+            res.emplace_back(*candidate.version, *candidate.format, grid._homography);
         }
 
         return res;
