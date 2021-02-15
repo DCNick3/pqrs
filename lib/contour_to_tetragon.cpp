@@ -926,6 +926,13 @@ namespace pqrs {
         if (!is_polygon_cw(ret))
             std::reverse(ret.begin(), ret.end());
 
+        // remove duplicates again
+        for (int i = 0; i < ret.size(); i++) {
+            // if we got any duplicate corners as a result of refinement - bail out
+            if (ret[i] == ret[(i + 1) % ret.size()])
+                return {};
+        }
+
         return {{ret[0], ret[1], ret[2], ret[3]}};
     }
 }
