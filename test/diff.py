@@ -98,8 +98,11 @@ parser.add_argument("METRICS_FILE1", type=str, help="path to the first file with
 parser.add_argument("METRICS_FILE2", type=str, help="path to the second file with metrics")
 args = parser.parse_args()
 
-metrics1 = Metrics(args.METRICS_FILE1)
-metrics2 = Metrics(args.METRICS_FILE2)
+with open(args.METRICS_FILE1, "rb") as f:
+	metrics1 = Metrics.load(f)
+
+with open(args.METRICS_FILE2, "rb") as f:
+	metrics2 = Metrics.load(f)
 
 stages = {
 	"Stage00 (info)": print_info,

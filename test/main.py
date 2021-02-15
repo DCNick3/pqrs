@@ -1,67 +1,96 @@
 #!/usr/bin/env python3
 
-import io
 import time
 from pathlib import Path
 from tqdm import tqdm
-import PIL
-from PIL import Image
 import argparse
 import subprocess
 from datetime import datetime
+import numpy as np
+import zlib
+import pickle
+import base64
+import os
+import fcntl
 
 from metrics import Metrics
 
 
-def process(program, dataset_path, metrics):
+def set_non_block(output):
+    fd = output.fileno()
+    fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+    fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+
+
+def read_line(p):
+	res = p.stdout.readline()
+	if not res: return None
+	res = res.decode().strip("\n")
+	return pickle.loads(zlib.decompress(base64.b64decode(res)))
+
+def write(p, s):
+	p.stdin.write(f"{s}\n".encode())
+	p.stdin.flush()
+
+
+def process(program, dataset_path, metrics, jobs=1):
 	# Make all path absolute
 	dataset_path = dataset_path.absolute()
 	program = program.absolute()
 
 	# Find all files in dataset
 	all_files = list(dataset_path.rglob("*.*"))
-	all_files.sort()
+	np.random.shuffle(all_files)
 
-	if not all_files:
-		raise RuntimeError(f"dataset '{dataset_path}' is empty")
+	assert len(all_files) > 2 * jobs
 
-	for i, file in enumerate(tqdm(all_files, leave=False)):
+	processes = []
+	for i in range(jobs):
+		p = subprocess.Popen(["./worker.py", str(program), str(dataset_path)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		set_non_block(p.stdout)
+		processes.append(p)
+		write(p, all_files[0])
+		write(p, all_files[1])
+		all_files = all_files[2:]
 
-		# Try to load image
-		try:
-			img = Image.open(file)
-		except PIL.UnidentifiedImageError as e:
-			print(f"Error while loading image {file}")
-			continue # If it is not an image
 
-		# Convert image to RGB PPM format
-		with io.BytesIO() as output:
-			img.convert("RGB").save(output, format="PPM")
-			img_ppm = output.getvalue()
+	processes_i = 0
+	for file in tqdm(all_files):
+		while True:
+			p = processes[processes_i]
+			res = read_line(p)
+			if res is not None: break
+			processes_i = (processes_i + 1) % len(processes)
+			# time.sleep(0.01)
 
-		# Run program and collect output
-		start_time = time.perf_counter_ns()
-		p = subprocess.Popen([str(program), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		(stdout, stderr) = p.communicate(input=img_ppm)
-		returncode = p.wait()
-		end_time = time.perf_counter_ns()
-		
-		# Append collected data to metrics
-		metrics.append({
-			"image_path": str(file.relative_to(dataset_path)),
-			"stdout": stdout,
-			"stderr": stderr,
-			"return_code": returncode,
-			"process_time_ns": end_time - start_time,
-			})
+		write(p, file)
 
-	return metrics
+		if isinstance(res, dict):
+			metrics.append(res)
+		else:
+			print(res)
 
+	for p in processes:
+		for i in range(2):
+			while True:
+				res = read_line(p)
+				if res is not None: break
+				time.sleep(0.1)
+
+			if isinstance(res, dict):
+				metrics.append(res)
+			else:
+				print(res)
+
+		stdout, _ = p.communicate()
+		p.wait()
+	
 
 
 parser = argparse.ArgumentParser(description="Testbench", add_help=True)
 parser.add_argument("-o", "--output-file", type=str, metavar="FILE_NAME", help="specify name of the output file")
-parser.add_argument("-m", "--message", type=str, metavar="<msg>", help="add message to file")
+parser.add_argument("-m", "--message", type=str, metavar="msg", help="add message to file")
+parser.add_argument("-j", "--jobs", type=int, default=1, metavar="jobs", help="specifies the number of jobs (commands) to run simultaneously")
 parser.add_argument("PROGRAM", type=str, help="path to program you want to test")
 parser.add_argument("DATASET_PATH", type=str, help="path to dataset")
 args = parser.parse_args()
@@ -90,8 +119,9 @@ if not program.is_file():
 
 # Metrics object will store all collected data
 metrics = Metrics(comment=args.message)
-
-res = process(program, dataset_path, metrics)
+process(program, dataset_path, metrics, args.jobs)
 
 print(f"Save result to {output_file}")
-res.save(output_file)
+
+with open(output_file, "wb") as f:
+	Metrics.dump(metrics, f)

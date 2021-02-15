@@ -59,7 +59,8 @@ parser.add_argument("-v", "--verbose", action="store_true", help="print detailed
 parser.add_argument("METRICS_FILE", type=str, help="path to file with metrics you want to analyze")
 args = parser.parse_args()
 
-metrics = Metrics(args.METRICS_FILE)
+with open(args.METRICS_FILE, "rb") as f:
+	metrics = Metrics.load(f)
 
 stages = {
 	"Stage00 (info)": print_info,

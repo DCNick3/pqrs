@@ -7,11 +7,9 @@ from datetime import datetime
 
 class Metrics:
 
-	def __init__(self, file_name=None, comment=None):
+	def __init__(self, comment=None):
 		self.data = {}
 		self.info = {"comment": comment}
-		if file_name is not None:
-			self.load(file_name)
 
 	def __len__(self):
 		return len(self.data)
@@ -28,23 +26,32 @@ class Metrics:
 	def get_info(self):
 		return self.info
 
-	def save(self, file_name):
-		self.set_info("save_time", datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"))
+	@classmethod
+	def dumps(cls, metrics):
+		metrics.set_info("save_time", datetime.now().strftime("%d.%m.%Y %H:%M:%S.%f"))
+		data = {"data": metrics.data, "info": metrics.info}
+		return zlib.compress(pickle.dumps(data), level=9)
 
-		data = {"data": self.data, "info": self.info}
+	@classmethod
+	def dump(cls, metrics, f):
+		f.write(cls.dumps(metrics))
 
-		with open(file_name, "wb") as f:
-			f.write(zlib.compress(pickle.dumps(data), level=9))
+	@classmethod
+	def loads(cls, data):
+		data = pickle.loads(zlib.decompress(data))
 
-	def load(self, file_name):
-		with open(file_name, "rb") as f:
-			data = pickle.loads(zlib.decompress(f.read()))
+		res = cls()
+		res.data = data["data"]
+		res.info = data["info"]
 
-		self.data = data["data"]
-		self.info = data["info"]
-
-		for v in self.data.values():
+		for v in res.data.values():
 			assert all(k in v for k in ["stdout", "stderr", "return_code", "process_time_ns"])
+
+		return res
+
+	@classmethod
+	def load(cls, f):
+		return cls.loads(f.read())
 
 	def get_data(self):
 		"""Get all data"""
@@ -62,3 +69,11 @@ class Metrics:
 			res[group].append({"image_path": k, **v})
 
 		return dict(res)
+
+	@classmethod
+	def concat(cls, metrics, comment=None):
+		assert all(isinstance(m, cls) for m in metrics)
+
+		res = cls(comment=comment)
+		# res.data = 
+
