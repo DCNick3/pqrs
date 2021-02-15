@@ -8,56 +8,78 @@ import PIL
 from PIL import Image
 import argparse
 import subprocess
+from datetime import datetime
 
 from metrics import Metrics
 
 
-def main(program, dataset_path):
-	all_files = [p for p in dataset_path.rglob("*.*")]  # .
+def process(program, dataset_path):
+	# Make all path absolute
+	dataset_path = dataset_path.absolute()
+	program = program.absolute()
+
+	# Find all files in dataset
+	all_files = list(dataset_path.rglob("*.*"))
 	all_files.sort()
 
 	if not all_files:
 		raise RuntimeError(f"dataset '{dataset_path}' is empty")
 
+	# Metrics object will store all collected data
 	metrics = Metrics()
 
-	with tqdm(total=len(all_files), leave=False) as pbar:
-		for i, file in enumerate(all_files):
-			pbar.n = i
-			pbar.refresh()
+	for i, file in enumerate(tqdm(all_files, leave=False)):
 
-			try:
-				img = Image.open(file)
-			except PIL.UnidentifiedImageError as e:
-				continue
+		# Try to load image
+		try:
+			img = Image.open(file)
+		except PIL.UnidentifiedImageError as e:
+			print(f"Error while loading image {file}")
+			continue # If it is not an image
 
-			with io.BytesIO() as output:
-				img.save(output, format="PPM")
-				img_ppm = output.getvalue()
+		# Convert image to RGB PPM format
+		with io.BytesIO() as output:
+			img.convert("RGB").save(output, format="PPM")
+			img_ppm = output.getvalue()
 
-			start_time = time.perf_counter_ns()
-			p = subprocess.Popen([str(program.absolute()), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			(stdout, stderr) = p.communicate(input=img_ppm)
-			returncode = p.wait()
-			end_time = time.perf_counter_ns()
-			
-			metrics.append({
-				"image_path": str(file.relative_to(dataset_path)),
-				"stdout": stdout,
-				"stderr": stderr,
-				"returncode": returncode,
-				"process_time_ns": end_time - start_time,
-				})
+		# Run program and collect output
+		start_time = time.perf_counter_ns()
+		p = subprocess.Popen([str(program), "/dev/stdin"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		(stdout, stderr) = p.communicate(input=img_ppm)
+		returncode = p.wait()
+		end_time = time.perf_counter_ns()
+		
+		# Append collected data to metrics
+		metrics.append({
+			"image_path": str(file.relative_to(dataset_path)),
+			"stdout": stdout,
+			"stderr": stderr,
+			"return_code": returncode,
+			"process_time_ns": end_time - start_time,
+			})
 
-	metrics.print(verbose=args.verbose)
+	return metrics
 
 
 
 parser = argparse.ArgumentParser(description="Testbench", add_help=True)
-parser.add_argument("-v", "--verbose", action="store_true", help="show more output")
+parser.add_argument("-o", "--output-file", type=str, metavar="FILE_NAME", help="specify name of the output file")
 parser.add_argument("PROGRAM", type=str, help="path to program you want to test")
 parser.add_argument("DATASET_PATH", type=str, help="path to dataset")
 args = parser.parse_args()
+
+
+if args.output_file is None:
+	output_file = datetime.now().strftime("metrics_results/%Y%m%d_%H%M%S_%f.pkl")
+	output_file = Path(__file__).absolute().parent.joinpath(output_file)
+else:
+	output_file = Path(args.output_file).absolute()
+
+if output_file.is_file():
+	raise RuntimeError("Output file already exist")
+
+if not output_file.parent.is_dir():
+	raise RuntimeError(f"Directory {output_file.parent} do not exist")
 
 program = Path(args.PROGRAM)
 dataset_path = Path(args.DATASET_PATH)
@@ -68,4 +90,7 @@ if not dataset_path.is_dir():
 if not program.is_file():
 	raise RuntimeError(f"'{program}' is not a file")
 
-main(program, dataset_path)
+print(f"Save result to {output_file}")
+
+res = process(program, dataset_path)
+res.save(output_file)

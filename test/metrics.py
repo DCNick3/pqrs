@@ -1,45 +1,48 @@
 import os.path
+import pickle
+from collections import defaultdict
 
 
 class Metrics:
 
-	def __init__(self):
+	def __init__(self, file_name=None):
 		self.data = {}
+		if file_name is not None:
+			self.load(file_name)
+
+	def __len__(self):
+		return len(self.data)
 
 	def append(self, dictionary):
 		assert isinstance(dictionary, dict)
-		assert all(k in dictionary for k in ["image_path", "returncode", "process_time_ns"])
+		assert all(k in dictionary for k in ["image_path", "stdout", "stderr", "return_code", "process_time_ns"])
 
-		image_path = os.path.dirname(dictionary["image_path"])
-		if image_path in self.data:
-			self.data[image_path].append(dictionary)
-		else:
-			self.data[image_path] = [dictionary]
+		self.data[dictionary.pop("image_path")] = dictionary
 
-	def print_verbose(self):
-		for path, item in self.data.items():
+	def save(self, file_name):
+		with open(file_name, "wb") as f:
+			pickle.dump(self.data, f)
 
-			for el in item:
-				print(f"{el['image_path']}: {el['returncode']}")
+	def load(self, file_name):
+		with open(file_name, "rb") as f:
+			self.data = pickle.load(f)
 
+		for v in self.data.values():
+			assert all(k in v for k in ["stdout", "stderr", "return_code", "process_time_ns"])
 
-	def print(self, verbose=False):
-		if verbose: return self.print_verbose()
+	def get_data(self):
+		"""Get all data"""
+		return self.data
 
-		for path, item in self.data.items():
-			print(f"{path}:")
+	def filter(self, filter):
+		"""Get list of all data which pass throw filter."""
+		return {k: v for k, v in self.data.items() if filter(k, v)}
 
-			rc = {}
-			for el in item:
-				code = el["returncode"]
-				if code in rc:
-					rc[code] += 1
-				else:
-					rc[code] = 1
+	def split_by_folders(self):
+		res = defaultdict(Metrics)
 
-			total = sum(rc.values())
+		for k, v in self.data.items():
+			group = os.path.dirname(k)
+			res[group].append({"image_path": k, **v})
 
-			print("\tReturn codes: " + ", ".join(["%s(%.3f%%)" % (k, v/total * 100) for k, v in sorted(rc.items())]))
-			
-			average_process_time_ns = sum(i["process_time_ns"] for i in item) / len(item)
-			print("\tAverage process time %.3fms" % (average_process_time_ns / 1000 / 1000))
+		return dict(res)
