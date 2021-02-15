@@ -13,7 +13,7 @@
 namespace pqrs {
     struct easy_scan_result {
         std::vector<finder_pattern> finder_patterns;
-        std::vector<scanned_qr> qrs;
+        std::vector<decoded_qr> qrs;
     };
 
     easy_scan_result easy_scan_qr_codes(gray_u8 const& image);

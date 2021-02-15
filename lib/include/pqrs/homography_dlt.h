@@ -28,6 +28,8 @@ namespace pqrs {
         }
 
         [[nodiscard]] inline homography_matrix matrix() const { return _matrix; }
+
+        [[nodiscard]] homography inverse() const;
     };
 
     // calculate matrix H from pairs (x_i, x_i') such that x_i' = H x_i

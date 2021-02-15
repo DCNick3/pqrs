@@ -7,6 +7,10 @@
 #include <pqrs/point2d.h>
 #include <pqrs/qr_ecc_decoder.h>
 
+#include <optional>
+
+#include <xtensor/xtensor.hpp>
+
 namespace pqrs {
 
     struct ec_blocks_info {
@@ -69,16 +73,29 @@ namespace pqrs {
             _block_info[static_cast<int>(error_level::H)] = h;
         }
 
-        [[nodiscard]] inline std::vector<point2d> alignment_locations() const {
-            std::vector<point2d> res;
+        [[nodiscard]] inline xt::xtensor<std::optional<point2d>, 2> alignment_grid() const {
+            decltype(alignment_grid())::shape_type shape = {std::size_t(_alignment_count), std::size_t(_alignment_count)};
+            decltype(alignment_grid()) res(shape);
             for (int row = 0; row < _alignment_count; row++)
                 for (int col = 0; col < _alignment_count; col++) {
                     if ((row == 0 && col == 0)
-                            || (row == 0 && col == _alignment_count - 1)
-                            || (row == _alignment_count - 1 && col == 0))
-                        continue;
-                    res.emplace_back(_alignment[col], _alignment[row]);
+                        || (row == 0 && col == _alignment_count - 1)
+                        || (row == _alignment_count - 1 && col == 0)
+                    )
+                        res(row, col) = {};
+                    else
+                        res(row, col) = {{_alignment[col], _alignment[row]}};
                 }
+            return res;
+        }
+
+        [[nodiscard]] inline std::vector<point2d> alignment_locations() const {
+            auto grid = alignment_grid();
+            std::vector<point2d> res;
+            for (int row = 0; row < _alignment_count; row++)
+                for (int col = 0; col < _alignment_count; col++)
+                    if (grid(row, col))
+                        res.emplace_back(*grid(row, col));
             return res;
         }
     };

@@ -35,12 +35,12 @@ namespace pqrs {
         std::vector<std::uint8_t> _data_and_ecc;
     };
 
-    struct scanned_qr {
+    struct detected_qr {
         int _version{};
         qr_format _format;
+        std::vector<std::pair<vector2d, vector2d>> _homography_features;
         homography _homography;
-
-        std::optional<std::string> _decoded_content;
+        std::uint8_t _threshold;
 
         [[nodiscard]] inline int size() const {
             return 17 + _version * 4;
@@ -62,14 +62,27 @@ namespace pqrs {
             return _homography.map({(float)size(), (float)size()});
         }
 
-        inline scanned_qr(int version, const qr_format &format, homography homography)
+        inline detected_qr(int version, const qr_format &format,
+                           std::vector<std::pair<vector2d, vector2d>> homography_features,
+                           std::uint8_t threshold)
                 : _version(version), _format(format),
-                  _homography(std::move(homography)) {}
+                  _homography_features(std::move(homography_features)),
+                  _homography(estimate_homography(_homography_features)),
+                  _threshold(threshold) {}
+    };
 
-        inline scanned_qr(int version, const qr_format &format, homography homography,
+    struct decoded_qr : detected_qr {
+        std::string _decoded_content;
+
+        inline decoded_qr(detected_qr detected_qr1, std::string decoded_content)
+            : detected_qr(std::move(detected_qr1)), _decoded_content(std::move(decoded_content)) {}
+
+        inline decoded_qr(int version, const qr_format &format,
+                          std::vector<std::pair<vector2d, vector2d>> homography_features,
+                          std::uint8_t threshold,
                           std::string decoded_content)
-                : _version(version), _format(format),
-                  _homography(std::move(homography)), _decoded_content(std::move(decoded_content)) {}
+                : detected_qr(version, format, std::move(homography_features), threshold),
+                  _decoded_content(std::move(decoded_content)) {}
     };
 
 }

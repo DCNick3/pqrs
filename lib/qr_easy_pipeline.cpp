@@ -35,12 +35,12 @@ namespace pqrs {
             }
         }
 
-        auto scanned = pqrs::scan_qr_codes(gray, finder_patterns);
-        decltype(scanned) res;
-
-        for (auto& qr : scanned) {
-            if (qr._decoded_content)
-                res.emplace_back(std::move(qr));
+        auto detected = pqrs::detect_qr_codes(gray, finder_patterns);
+        std::vector<decoded_qr> res;
+        for (auto const& qr : detected) {
+            auto decoded = pqrs::decode_qr_code(gray, qr);
+            if (decoded)
+                res.emplace_back(*decoded);
         }
 
         return {finder_patterns, std::move(res)};

@@ -12,6 +12,11 @@
 #include <utility>
 
 namespace pqrs {
-    std::vector<scanned_qr> scan_qr_codes(gray_u8 const& image,
-                                          std::vector<finder_pattern> const& finder_patterns);
+    std::vector<detected_qr> detect_qr_codes(gray_u8 const& image,
+                                             std::vector<finder_pattern> const& finder_patterns);
+
+    std::optional<decoded_qr> decode_qr_code(gray_u8 const& image, detected_qr detected_qr);
+
+    /*std::vector<decoded_qr> scan_qr_codes(gray_u8 const& image,
+                                          std::vector<finder_pattern> const& finder_patterns);*/
 }

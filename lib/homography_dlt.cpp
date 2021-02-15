@@ -136,4 +136,8 @@ namespace pqrs {
 
         return estimate_homography(conv);
     }
+
+    homography homography::inverse() const {
+        return homography(pqrs::inverse(_matrix));
+    }
 }

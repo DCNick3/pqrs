@@ -25,6 +25,9 @@ namespace pqrs {
         inline vector2d operator*(float o) const { return {x() * o, y() * o}; }
         inline vector2d operator/(float o) const { return {x() / o, y() / o}; }
 
+        inline vector2d& operator+=(vector2d o) { *this = *this + o; return *this; }
+        inline vector2d& operator-=(vector2d o) { *this = *this - o; return *this; }
+
         inline vector2d& operator*=(float o) { *this = *this * o; return *this; }
         inline vector2d& operator/=(float o) { *this = *this / o; return *this; }
 

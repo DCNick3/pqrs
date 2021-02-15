@@ -16,6 +16,7 @@
 #include <pqrs/homography_dlt.h>
 #include <pqrs/qr_scanner.h>
 #include <pqrs/qr_bitstream_reader.h>
+#include <pqrs/qr_grid_reader.h>
 
 
 int main(int argc, char* argv[]) {
@@ -99,17 +100,28 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    auto qr_codes = pqrs::scan_qr_codes(gray, finder_patterns);
+    auto qr_codes = pqrs::detect_qr_codes(gray, finder_patterns);
 
     for (auto const& qr : qr_codes) {
         auto sz = qr.size();
+
+        auto grid = pqrs::qr_grid_global(gray, qr._homography, sz);
+
         for (int i = 0; i < sz; i++) {
             for (int j = 0; j < sz; j++) {
                 auto pt = qr._homography.map({(float)i + .5f, (float)j + .5f});
-                img(pt.y(), pt.x(), 0) = 255;
-                img(pt.y(), pt.x(), 1) = 0;
+                auto val = grid.sample(i, j);
+
+                img(pt.y(), pt.x(), 0) = val ? 255 : 0;
+                img(pt.y(), pt.x(), 1) = val ? 0 : 255;
                 img(pt.y(), pt.x(), 2) = 255;
             }
+        }
+
+        auto scanned = pqrs::decode_qr_code(gray, qr);
+
+        if (scanned) {
+            std::cerr << "Scanned: " << scanned->_decoded_content << std::endl;
         }
     }
 
