@@ -170,12 +170,13 @@ namespace pqrs {
             candidate_qr_code(finder_pattern origin, finder_pattern right, finder_pattern bottom)
                     : origin(std::move(origin)), right(std::move(right)), bottom(std::move(bottom)) {}
 
-            [[nodiscard]] dynamic_bitset read_format_region_0(gray_u8 const& image) const {
+            [[nodiscard]] std::optional<dynamic_bitset> read_format_region_0(gray_u8 const& image) const {
                 auto grid = qr_grid_local::from_finder(image, origin);
+                if (!grid) return {};
                 dynamic_bitset r;
                 r.reserve(15);
 
-                reader read(grid, r);
+                reader read(*grid, r);
 
                 for (int i = 0; i < 6; i++) {
                     read(8, i);
@@ -193,12 +194,13 @@ namespace pqrs {
 
             }
 
-            [[nodiscard]] dynamic_bitset read_version_region_0(gray_u8 const& image) const {
+            [[nodiscard]] std::optional<dynamic_bitset> read_version_region_0(gray_u8 const& image) const {
                 auto grid = qr_grid_local::from_finder(image, right);
+                if (!grid) return {};
                 dynamic_bitset r;
                 r.reserve(18);
 
-                reader read(grid, r);
+                reader read(*grid, r);
 
                 for (int i = 0; i < 18; i++) {
                     int row = i/3;
@@ -210,12 +212,14 @@ namespace pqrs {
 
             }
 
-            [[nodiscard]] dynamic_bitset read_format_region_1(gray_u8 const& image) const {
+            [[nodiscard]] std::optional<dynamic_bitset> read_format_region_1(gray_u8 const& image) const {
                 dynamic_bitset r;
                 r.reserve(15);
 
                 {
-                    reader read(qr_grid_local::from_finder(image, right), r);
+                    auto grid = qr_grid_local::from_finder(image, right);
+                    if (!grid) return {};
+                    reader read(*grid, r);
 
                     for (int i = 0; i < 8; i++) {
                         read(6 - i, 8);
@@ -224,7 +228,9 @@ namespace pqrs {
 
 
                 {
-                    reader read(qr_grid_local::from_finder(image, bottom), r);
+                    auto grid = qr_grid_local::from_finder(image, bottom);
+                    if (!grid) return {};
+                    reader read(*grid, r);
 
                     for (int i = 0; i < 7; i++) {
                         read(8, i);
@@ -235,12 +241,14 @@ namespace pqrs {
 
             }
 
-            [[nodiscard]] dynamic_bitset read_version_region_1(gray_u8 const& image) const {
+            [[nodiscard]] std::optional<dynamic_bitset> read_version_region_1(gray_u8 const& image) const {
                 dynamic_bitset r;
                 r.reserve(18);
 
                 {
-                    reader read(qr_grid_local::from_finder(image, bottom), r);
+                    auto grid = qr_grid_local::from_finder(image, bottom);
+                    if (!grid) return {};
+                    reader read(*grid, r);
 
                     for (int i = 0; i < 18; i++) {
                         int row = i%3;
@@ -255,13 +263,19 @@ namespace pqrs {
 
             bool try_determine_format(gray_u8 const& image) {
                 auto zero = read_format_region_0(image);
-                auto zero_format = try_decode_qr_format(zero);
-                if (zero_format) {
-                    format = zero_format;
-                    return true;
+                if (zero) {
+                    auto zero_format = try_decode_qr_format(*zero);
+                    if (zero_format) {
+                        format = zero_format;
+                        return true;
+                    }
                 }
-                format = try_decode_qr_format(read_format_region_1(image));
-                return bool(format);
+                auto one = read_format_region_1(image);
+                if (one) {
+                    format = try_decode_qr_format(*one);
+                    return bool(format);
+                }
+                return false;
             }
 
             std::optional<int> estimate_version_by_size() {
@@ -289,9 +303,11 @@ namespace pqrs {
                 pps.push_back({line(origin.poly[1], bottom.poly[0]), {0, 1, 0}});
 
                 auto homo = estimate_homography(pps);
+                if (!homo)
+                    return {};
 
-                auto right_grid = homo.map(right.poly[3]);
-                auto bottom_grid = homo.map(bottom.poly[3]);
+                auto right_grid = homo->map(right.poly[3]);
+                auto bottom_grid = homo->map(bottom.poly[3]);
 
                 auto version_x = ((right_grid.x() + 7) - 17) / 4;
                 auto version_y = ((bottom_grid.y() + 7) - 17) / 4;
@@ -317,8 +333,13 @@ namespace pqrs {
                     version = estimate;
                     return true;
                 } else {
-                    auto v0 = try_decode_qr_version(read_version_region_0(image));
-                    auto v1 = try_decode_qr_version(read_version_region_1(image));
+                    auto rg0 = read_version_region_0(image);
+                    auto rg1 = read_version_region_1(image);
+                    if (!rg0 || rg1)
+                        return false;
+
+                    auto v0 = try_decode_qr_version(*rg0);
+                    auto v1 = try_decode_qr_version(*rg1);
                     if (!v0 && !v1) return false;
                     if (!v0 != !v1) {
                         version = v0 ? v0 : v1;
@@ -359,7 +380,8 @@ namespace pqrs {
 
                 auto homo_features = make_homography_features();
                 auto homo = estimate_homography(homo_features);
-                auto homo_inv = homo.inverse();
+                if (!homo)
+                    return false;
 
                 auto orig_pos_grid = version_info.alignment_grid();
                 //xt::xtensor<std::optional<vector2d>, 2> corrected_pos_grid(orig_pos_grid.shape(),
@@ -380,7 +402,7 @@ namespace pqrs {
                             for (int col = 0; col < 3; col++) {
                                 auto grid_x = p.x() - 1.f + (float)col;
 
-                                auto sample_point = homo.map({grid_x, grid_y});
+                                auto sample_point = homo->map({grid_x, grid_y});
 
                                 samples(row, col) = interpolate_bilinear(image, sample_point);
                             }
@@ -426,8 +448,8 @@ namespace pqrs {
 
                         p -= vector2d(.5f, .5f);
 
-                        auto orig_image_p = homo.map(vector2d(*orig));
-                        auto image_p = homo.map(p);
+                        auto orig_image_p = homo->map(vector2d(*orig));
+                        auto image_p = homo->map(p);
 
                         res.emplace_back(vector2d(*orig), image_p);
                     }
@@ -505,10 +527,12 @@ namespace pqrs {
             return candidates;
         }
 
-        [[nodiscard]] qr_grid_global make_grid(gray_u8 const& image, homo_features const& features,
+        [[nodiscard]] std::optional<qr_grid_global> make_grid(gray_u8 const& image, homo_features const& features,
                                         std::uint8_t threshold, int size) {
             auto homo = estimate_homography(features);
-            return qr_grid_global(image, homo, size);
+            if (!homo)
+                return {};
+            return qr_grid_global(image, *homo, size);
         }
 
         [[nodiscard]] std::optional<std::string> try_decode(const gray_u8 &image, const detected_qr &detected_qr) {
@@ -519,9 +543,11 @@ namespace pqrs {
             auto features = detected_qr._homography_features;
             auto threshold = detected_qr._threshold;
             auto grid = make_grid(image, features, threshold, detected_qr.size());
+            if (!grid)
+                return {};
 
             auto raw_data = read_raw_data(version, format, [&](point2d p) {
-                return grid.sample(p);
+                return grid->sample(p);
             });
 
             auto const& version_info = get_version_info(version);
@@ -572,7 +598,12 @@ namespace pqrs {
             auto homo_features = candidate.make_homography_features();
             auto thresh = (candidate.bottom.gray_threshold +
                     candidate.right.gray_threshold + candidate.origin.gray_threshold) / 3;
-            res.emplace_back(*candidate.version, *candidate.format, homo_features, thresh);
+            auto homo = estimate_homography(homo_features);
+
+            if (!homo)
+                continue;
+
+            res.emplace_back(*candidate.version, *candidate.format, homo_features, *homo, thresh);
         }
 
         return res;
@@ -590,7 +621,8 @@ namespace pqrs {
             auto str = try_decode(image, detected_qr);
 
             if (str)
-                return {{version, format, std::move(features), threshold, *str}};
+                return {{version, format, std::move(features), std::move(detected_qr._homography),
+                            threshold, *str}};
 
             // No? Remove feature with the largest error and try again
 
@@ -611,7 +643,11 @@ namespace pqrs {
             if (selected == -1)
                 return {};
             features.erase(features.begin() + selected);
-            detected_qr._homography = estimate_homography(features);
+            auto homo = estimate_homography(features);
+            if (!homo)
+                return {};
+
+            detected_qr._homography = *homo;
         }
 
         return {};

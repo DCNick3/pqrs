@@ -40,7 +40,7 @@ namespace pqrs {
 
         using qr_grid::sample;
 
-        static inline qr_grid_local from_finder(gray_u8 const& image, finder_pattern const& finder) {
+        static inline std::optional<qr_grid_local> from_finder(gray_u8 const& image, finder_pattern const& finder) {
             std::vector<std::pair<vector2d, vector2d>> pts;
 
             pts.push_back({{7, 0}, finder.poly[0]});
@@ -49,8 +49,10 @@ namespace pqrs {
             pts.push_back({{0, 0}, finder.poly[3]});
 
             auto homo = estimate_homography(pts);
+            if (!homo)
+                return {};
 
-            return qr_grid_local(image, finder.gray_threshold, homo);
+            return qr_grid_local(image, finder.gray_threshold, *homo);
         }
     };
 

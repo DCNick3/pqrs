@@ -44,7 +44,7 @@ namespace pqrs {
             return r;
         }
 
-        matrix inverse(matrix a) {
+        std::optional<matrix> inverse(matrix a) {
             // matrix inverse using Gauss-Jordan elimination
             assert(a.shape(0) == a.shape(1));
             auto N = a.shape(0);
@@ -55,7 +55,8 @@ namespace pqrs {
 
             for (int i = 0; i < N; i++) {
                 if (a(i, i) == 0.f)
-                    throw std::domain_error("Encountered zero on main diagonal while trying to find an inverse");
+                    return {};
+                    //throw std::domain_error("Encountered zero on main diagonal while trying to find an inverse");
                 for (int j = 0; j < N; j++) {
                     if (i != j) {
                         auto ratio = a(j, i) / a(i, i);
@@ -76,16 +77,18 @@ namespace pqrs {
             return r;
         }
 
-        matrix pseudo_inverse(matrix const& a) {
+        std::optional<matrix> pseudo_inverse(matrix const& a) {
             // assuming a has linearly independent columns
             // (what does it mean for LLS, again?)
             matrix transposed = xt::transpose(a);
             auto inv = inverse(product(transposed, a));
-            return product(inv, transposed);
+            if (inv)
+                return product(*inv, transposed);
+            return {};
         }
     }
 
-    homography estimate_homography(std::vector<std::pair<homo_vector2d, homo_vector2d>> const& points) {
+    std::optional<homography> estimate_homography(std::vector<std::pair<homo_vector2d, homo_vector2d>> const& points) {
         matrix A({2 * points.size(), 8}, 0.f);
         vector b({2 * points.size()}, 0.f);
 
@@ -112,7 +115,11 @@ namespace pqrs {
         // h9 is taken to be one (by reducing number of equations)
 
         // LLS using pseudo-inverse is calculated
-        auto x = product(pseudo_inverse(A), b);
+        auto pi = pseudo_inverse(A);
+        if (!pi)
+            return {};
+
+        auto x = product(*pi, b);
         homography_matrix res;
         res(0, 0) = x(0);
         res(0, 1) = x(1);
@@ -127,7 +134,7 @@ namespace pqrs {
         return homography(res);
     }
 
-    homography estimate_homography(std::vector<std::pair<vector2d, vector2d>> const& points) {
+    std::optional<homography> estimate_homography(std::vector<std::pair<vector2d, vector2d>> const& points) {
         std::vector<std::pair<homo_vector2d, homo_vector2d>> conv;
         conv.reserve(points.size());
 
@@ -138,6 +145,9 @@ namespace pqrs {
     }
 
     homography homography::inverse() const {
-        return homography(pqrs::inverse(_matrix));
+        auto pi = pqrs::inverse(_matrix);
+        if (!pi)
+            throw std::runtime_error("homography::inverse() failed");
+        return homography(*pi);
     }
 }

@@ -33,8 +33,8 @@ namespace pqrs {
     };
 
     // calculate matrix H from pairs (x_i, x_i') such that x_i' = H x_i
-    homography estimate_homography(std::vector<std::pair<vector2d, vector2d>> const& points);
+    std::optional<homography> estimate_homography(std::vector<std::pair<vector2d, vector2d>> const& points);
 
     // calculate matrix H from pairs (x_i, x_i') such that x_i' = H x_i in homogeneous coordinates
-    homography estimate_homography(std::vector<std::pair<homo_vector2d, homo_vector2d>> const& points);
+    std::optional<homography> estimate_homography(std::vector<std::pair<homo_vector2d, homo_vector2d>> const& points);
 }

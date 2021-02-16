@@ -64,10 +64,11 @@ namespace pqrs {
 
         inline detected_qr(int version, const qr_format &format,
                            std::vector<std::pair<vector2d, vector2d>> homography_features,
+                           homography homography,
                            std::uint8_t threshold)
                 : _version(version), _format(format),
                   _homography_features(std::move(homography_features)),
-                  _homography(estimate_homography(_homography_features)),
+                  _homography(std::move(homography)),
                   _threshold(threshold) {}
     };
 
@@ -79,9 +80,11 @@ namespace pqrs {
 
         inline decoded_qr(int version, const qr_format &format,
                           std::vector<std::pair<vector2d, vector2d>> homography_features,
+                          homography homography,
                           std::uint8_t threshold,
                           std::string decoded_content)
-                : detected_qr(version, format, std::move(homography_features), threshold),
+                : detected_qr(version, format, std::move(homography_features),
+                              std::move(homography), threshold),
                   _decoded_content(std::move(decoded_content)) {}
     };
 
