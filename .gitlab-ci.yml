@@ -1,6 +1,7 @@
 
 stages:
   - build
+  - test
 
 build_js:
   image: emscripten/emsdk
@@ -22,4 +23,33 @@ build_js:
   artifacts:
     paths:
       - dist
+
+build_native:
+  image: rikorose/gcc-cmake:gcc-10
+  stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - make
+    - cd ..
+    - mkdir -p dist
+    - cp build/bin/scan-*/pqrs-* dist
+  artifacts:
+    paths:
+      - dist
+
+test_native_basic:
+  image: python:3.9-buster
+  dependencies: 
+    - build_native
+  stage: test
+  script:
+    - ls dist
+    - cd test
+    - pip install -r requirements.txt
+    - ./test_basic_testcases.py ../dist/pqrs-scan-one
+
 
