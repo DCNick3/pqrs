@@ -51,6 +51,12 @@
     #noQRFound {
       text-align: center;
     }
+
+    #outputData * {
+      display: block;
+      padding-top: 1.5em;
+    }
+  </style>
   </style>
 </head>
 <body>
@@ -87,7 +93,7 @@
     }
 
     // Use facingMode: environment to attemt to get the front camera on phones
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+    navigator.mediaDevices.getUserMedia({ video: {"facingMode":"environment","width":{"ideal":640},"height":{"ideal":480}} }).then(function(stream) {
       video.srcObject = stream;
       video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
       video.play();
@@ -145,7 +151,7 @@
                     child.innerText = code.content;
                     child.href = code.content;
                 } else {
-                    child = document.createElement('div');
+                    child = document.createElement('span');
                     child.innerText = code.content;
                 }
 
