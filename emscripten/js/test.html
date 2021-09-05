@@ -56,6 +56,14 @@
       display: block;
       padding-top: 1.5em;
     }
+    
+    #timeOutputWrap {
+      padding-top: 1.5em;
+    }
+
+    #timeOutput {
+      display: inline;
+    }
   </style>
   </style>
 </head>
@@ -68,8 +76,9 @@
     <div id="outputMessage">No QR code detected (yet).</div>
     <div hidden><b>Detected codes:</b><br> <div id="outputData"></div></div>
   </div>
-  <div id="timeOutput">
-
+  <div id="timeOutputWrap">
+    <pre id="timeOutput"></pre>
+    <b>ms spent processing one frame</b>
   </div>
   <script>
     var video = document.createElement("video");
@@ -126,7 +135,7 @@
         if (times.length > 20)
           times.shift();
 
-        timeOutput.innerText = (times.reduce((a, b) => a + b) / times.length).toString();
+        timeOutput.innerText = (times.reduce((a, b) => a + b) / times.length).toFixed(1);
 
         /*var code = jsQR(imageData.data, imageData.width, imageData.height, {
           inversionAttempts: "dontInvert",
