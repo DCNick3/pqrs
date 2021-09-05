@@ -1,9 +1,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>jsQR Demo</title>
+  <title>pqrs Demo</title>
   <script src="dist/pqrs-js.js"></script> 
   <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
   <style>
     body {
       font-family: 'Ropa Sans', sans-serif;
@@ -53,13 +54,13 @@
   </style>
 </head>
 <body>
-  <h1>jsQR Demo</h1>
-  <p>Pure JavaScript QR code decoding library.</p>
+  <h1>pqrs Demo</h1>
+  <p>Portable QR detection library.</p>
   <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
   <canvas id="canvas" hidden></canvas>
   <div id="output" hidden>
-    <div id="outputMessage">No QR code detected.</div>
-    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+    <div id="outputMessage">No QR code detected (yet).</div>
+    <div hidden><b>Detected codes:</b><br> <div id="outputData"></div></div>
   </div>
   <div id="timeOutput">
 
@@ -73,6 +74,8 @@
     var outputMessage = document.getElementById("outputMessage");
     var outputData = document.getElementById("outputData");
     const timeOutput = document.getElementById("timeOutput");
+
+    const detectedQrCodes = new Set();
 
     function drawLine(begin, end, color) {
       canvas.beginPath();
@@ -124,10 +127,8 @@
         });*/
 
         if (codes.qrs.length == 0) {
-          outputMessage.hidden = false;
-          outputData.parentElement.hidden = true;
+            // nothing =)
         } else {
-          outputData.innerText = "";
           for (const code of codes.qrs) {
             drawLine(code.top_left, code.top_right, "#FF3B58");
             drawLine(code.top_right, code.bottom_right, "#FF3B58");
@@ -135,8 +136,30 @@
             drawLine(code.bottom_left, code.top_left, "#FF3B58");
             outputMessage.hidden = true;
             outputData.parentElement.hidden = false;
-            outputData.innerText += code.content;
+            
+            if (!detectedQrCodes.has(code.content)) {
+                const urlifyRegex = /^((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])$/i;
+                let child;
+                if (urlifyRegex.test(code.content)) {
+                    child = document.createElement('a');
+                    child.innerText = code.content;
+                    child.href = code.content;
+                } else {
+                    child = document.createElement('div');
+                    child.innerText = code.content;
+                }
+
+                outputData.appendChild(child);
+                detectedQrCodes.add(code.content);
+            }
           }
+        }
+
+        if (detectedQrCodes.size > 0) {
+
+            // ineffective as fuck, actually
+            for (const qr of detectedQrCodes) {
+            }
         }
 
         /*if (code) {
