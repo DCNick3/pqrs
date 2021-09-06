@@ -12,7 +12,11 @@ assert len(data) == w * h * 4
 
 def out(d):
     sys.stdout.buffer.write(d)
-
+def get(j, i):
+    coord = j * (w * 4) + i * 4
+    return bytes(data[coord:coord+4])
 
 out(bytes(f'P6 {w} {h}\n{255}\n', 'utf-8'))
-out(bytes(data[3::4]))
+for j in range(0, h):
+    for i in range(0, w):
+        out(get(j, i)[:3])

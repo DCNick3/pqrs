@@ -1,14 +1,28 @@
+![](https://img.shields.io/gitlab/pipeline/inno_baam/pqrs/master) ![](https://img.shields.io/npm/v/pqrs-js)
+
 # pqrs
 
 A Portable QR Scanning library.
-QR code detection is very much based on algorithms used in [BoofCV](https://boofcv.org).
-Decoding is based on [zxing](https://github.com/zxing/zxing) 
+Image processing is very much based on algorithms used in [BoofCV](https://boofcv.org).
+Decoding and error correction is based on [zxing](https://github.com/zxing/zxing) 
 
 Requires C++17 compiler. Seems to work with GCC and Clang
 
 Compiles as native code and as webassembly code for browser usage using emscripten
 
-### Why another QR scanner?
+### Demo
+
+Demo is available [here](https://dcnick3.me/js/pqrs-test.html)
+
+### Using in js projects
+
+There is an [npm package](https://www.npmjs.com/package/pqrs-js)
+
+It will work out-of-the box in nodejs and will probably require special handling for webassembly file distribution in browser.
+
+You can see [pqrs-cli](https://github.com/DCNick3/pqrs-cli) for example usage.
+
+### Long and sad story as to why this was created
 
 I needed a QR scanning library in web application. 
 So, I went with [jsQR](https://github.com/cozmo/jsQR), which is one of [zxing](https://github.com/zxing/zxing)  ports to js.
