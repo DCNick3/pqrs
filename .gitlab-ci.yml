@@ -9,13 +9,7 @@ build_js:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - mkdir build
-    - cd build
-    - emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
-    - make
-    - cd ..
-    - mkdir emscripten/js/bin/
-    - cp -r build/emscripten/cpp/pqrs-emscripten* emscripten/js/bin/
+    - ./build-emscripten.sh
     - cd emscripten/js
     - npm install
     - npm run-script build-prod

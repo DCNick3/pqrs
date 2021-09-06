@@ -11,6 +11,7 @@
 #include <xtensor/xfixed.hpp>
 
 #include <vector>
+#include <optional>
 
 namespace pqrs {
     typedef xt::xtensor_fixed<float, xt::xshape<3, 3>> homography_matrix;

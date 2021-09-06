@@ -1,17 +1,25 @@
 {
   "name": "pqrs-js",
+  "version": "1.0.0",
+  "files": [
+    "dist/**"
+  ],
+  "main": "dist/pqrs-js.js",
+  "types": "dist/bundle.d.ts",
   "scripts": {
-    "build": "webpack",
-    "build-prod": "webpack --mode=production",
+    "build-emscripten": "EM_NODE_JS=$NODE bash ../../build-emscripten.sh",
+    "build-dev": "webpack --mode=development",
+    "build-prod": "rm -rf dist && webpack --mode=production",
     "serve": "http-server",
-    "start": "npm run build && npm run serve",
-    "test": ""
+    "start": "npm run build-dev && npm run serve",
+    "start-prod": "npm run build-prod && npm run serve"
   },
   "devDependencies": {
     "exports-loader": "^2.0.0",
     "file-loader": "^6.2.0",
     "http-server": "^0.12.3",
     "null-loader": "^4.0.1",
+    "ts-loader": "^9.2.5",
     "webpack": "~5.21.2",
     "webpack-cli": "^4.5.0"
   }

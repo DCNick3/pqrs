@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "noImplicitAny": true,
+      "declaration": true,
+      "sourceMap": true,
+      "module": "es6",
+      "target": "ES2018",
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node"
+    }
+  }

@@ -81,108 +81,117 @@
     <b>ms spent processing one frame</b>
   </div>
   <script>
-    var video = document.createElement("video");
-    var canvasElement = document.getElementById("canvas");
-    var canvas = canvasElement.getContext("2d");
-    var loadingMessage = document.getElementById("loadingMessage");
-    var outputContainer = document.getElementById("output");
-    var outputMessage = document.getElementById("outputMessage");
-    var outputData = document.getElementById("outputData");
-    const timeOutput = document.getElementById("timeOutput");
+    (async function() {
+      var video = document.createElement("video");
+      var canvasElement = document.getElementById("canvas");
+      var canvas = canvasElement.getContext("2d");
+      var loadingMessage = document.getElementById("loadingMessage");
+      var outputContainer = document.getElementById("output");
+      var outputMessage = document.getElementById("outputMessage");
+      var outputData = document.getElementById("outputData");
+      const timeOutput = document.getElementById("timeOutput");
 
-    const detectedQrCodes = new Set();
+      const detectedQrCodes = new Set();
 
-    function drawLine(begin, end, color) {
-      canvas.beginPath();
-      canvas.moveTo(begin[0], begin[1]);
-      canvas.lineTo(end[0], end[1]);
-      canvas.lineWidth = 4;
-      canvas.strokeStyle = color;
-      canvas.stroke();
-    }
+      function drawLine(begin, end, color) {
+        canvas.beginPath();
+        canvas.moveTo(begin[0], begin[1]);
+        canvas.lineTo(end[0], end[1]);
+        canvas.lineWidth = 4;
+        canvas.strokeStyle = color;
+        canvas.stroke();
+      }
 
-    // Use facingMode: environment to attemt to get the front camera on phones
-    navigator.mediaDevices.getUserMedia({ video: {"facingMode":"environment","width":{"ideal":640},"height":{"ideal":480}} }).then(function(stream) {
-      video.srcObject = stream;
-      video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
-      video.play();
-      requestAnimationFrame(tick);
-    });
+      const pqrs_promise = await window.pqrs();
 
-    let times = [];
+      // Use facingMode: environment to attemt to get the front camera on phones
+      navigator.mediaDevices.getUserMedia({ video: {"facingMode":"environment","width":{"ideal":640},"height":{"ideal":480}} }).then(function(stream) {
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+        video.play();
+        requestAnimationFrame(tick);
+      });
 
-    async function tick() {
-      loadingMessage.innerText = "⌛ Loading video..."
-      if (video.readyState === video.HAVE_ENOUGH_DATA) {
-        loadingMessage.hidden = true;
-        canvasElement.hidden = false;
-        outputContainer.hidden = false;
+      let times = [];
 
-        canvasElement.height = video.videoHeight;
-        canvasElement.width = video.videoWidth;
-        canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-        var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+      async function tick() {
+        loadingMessage.innerText = "⌛ Loading video..."
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          loadingMessage.hidden = true;
+          canvasElement.hidden = false;
+          outputContainer.hidden = false;
 
-        const t0 = performance.now();
-        //console.time('scan');
+          const width = video.videoWidth;
+          const height = video.videoHeight;
+          
+          canvasElement.height = height;
+          canvasElement.width = width;
+          canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+          var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
 
-        const codes = await pqrs.scan_qr(imageData);
-        
-        //console.timeEnd('scan')
-        const t1 = performance.now();
+          const t0 = performance.now();
+          //console.time('scan');
 
-        times.push(t1 - t0);
-        if (times.length > 20)
-          times.shift();
+          const pqrs = await pqrs_promise;
 
-        timeOutput.innerText = (times.reduce((a, b) => a + b) / times.length).toFixed(1);
+          const codes = await pqrs.scan_qr(imageData);
+          
+          //console.timeEnd('scan')
+          const t1 = performance.now();
 
-        /*var code = jsQR(imageData.data, imageData.width, imageData.height, {
-          inversionAttempts: "dontInvert",
-        });*/
+          times.push(t1 - t0);
+          if (times.length > 20)
+            times.shift();
 
-        if (codes.qrs.length == 0) {
-            // nothing =)
-        } else {
-          for (const code of codes.qrs) {
-            drawLine(code.top_left, code.top_right, "#FF3B58");
-            drawLine(code.top_right, code.bottom_right, "#FF3B58");
-            drawLine(code.bottom_right, code.bottom_left, "#FF3B58");
-            drawLine(code.bottom_left, code.top_left, "#FF3B58");
-            outputMessage.hidden = true;
-            outputData.parentElement.hidden = false;
-            
-            if (!detectedQrCodes.has(code.content)) {
-                const urlifyRegex = /^((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])$/i;
-                let child;
-                if (urlifyRegex.test(code.content)) {
-                    child = document.createElement('a');
-                    child.innerText = code.content;
-                    child.href = code.content;
-                } else {
-                    child = document.createElement('span');
-                    child.innerText = code.content;
-                }
+          timeOutput.innerText = (times.reduce((a, b) => a + b) / times.length).toFixed(1);
 
-                outputData.appendChild(child);
-                detectedQrCodes.add(code.content);
+          /*var code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });*/
+
+          if (codes.qrs.length == 0) {
+              // nothing =)
+          } else {
+            for (const code of codes.qrs) {
+              drawLine(code.top_left, code.top_right, "#FF3B58");
+              drawLine(code.top_right, code.bottom_right, "#FF3B58");
+              drawLine(code.bottom_right, code.bottom_left, "#FF3B58");
+              drawLine(code.bottom_left, code.top_left, "#FF3B58");
+              outputMessage.hidden = true;
+              outputData.parentElement.hidden = false;
+              
+              if (!detectedQrCodes.has(code.content)) {
+                  const urlifyRegex = /^((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])$/i;
+                  let child;
+                  if (urlifyRegex.test(code.content)) {
+                      child = document.createElement('a');
+                      child.innerText = code.content;
+                      child.href = code.content;
+                  } else {
+                      child = document.createElement('span');
+                      child.innerText = code.content;
+                  }
+
+                  outputData.appendChild(child);
+                  detectedQrCodes.add(code.content);
+              }
             }
           }
+
+          if (detectedQrCodes.size > 0) {
+
+              // ineffective as fuck, actually
+              for (const qr of detectedQrCodes) {
+              }
+          }
+
+          /*if (code) {
+          } else {
+          }*/
         }
-
-        if (detectedQrCodes.size > 0) {
-
-            // ineffective as fuck, actually
-            for (const qr of detectedQrCodes) {
-            }
-        }
-
-        /*if (code) {
-        } else {
-        }*/
+        requestAnimationFrame(tick);
       }
-      requestAnimationFrame(tick);
-    }
+    })();
   </script>
 </body>
 </html>

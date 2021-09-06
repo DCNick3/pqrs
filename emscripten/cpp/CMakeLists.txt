@@ -1,8 +1,15 @@
 
 set(WRAPPER_SRC wrap.cpp)
 set(WRAPPER_LIB pqrs json11)
-set(WRAPPER_FLAGS --bind -sALLOW_MEMORY_GROWTH=1 -sDISABLE_EXCEPTION_CATCHING=0
-        -sENVIRONMENT=web -sFILESYSTEM=0 -sMODULARIZE=1)
+set(WRAPPER_FLAGS
+        --bind
+        --memory-init-file=0
+        -sALLOW_MEMORY_GROWTH=1
+        -sDISABLE_EXCEPTION_CATCHING=0
+        -sFILESYSTEM=0
+        -sMODULARIZE=1
+        -sMALLOC=dlmalloc
+        -sASSERTIONS=0)
 
 add_executable(pqrs-emscripten-wrapper-pure ${WRAPPER_SRC})
 target_link_libraries(pqrs-emscripten-wrapper-pure PRIVATE "${WRAPPER_LIB}")
