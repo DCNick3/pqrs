@@ -8,6 +8,9 @@ build_js:
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
+  before_script:
+    - apt-get -qq -y update
+    - apt-get -qq install -y --no-install-recommends ninja-build
   script:
     - ./build-emscripten.sh
     - cd emscripten/js
