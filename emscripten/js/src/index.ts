@@ -103,8 +103,9 @@ async function get_module(module_base: any) {
         const path = module_base.locateFile(pqrs_pure, scriptDirectory);
         console.log("Loading " + path);
         let contents = await readAsync(path);
-        contents = `var __dirname=d;var module={};var exports={};${contents}; return module.exports;`;
-        module = new Function('d', contents)(__dirname);
+        // the dirname should not actually be used
+        contents = `var __dirname='';var module={};var exports={};${contents}; return module.exports;`;
+        module = new Function('d', contents)();
     } else {
         module = pqrs_wasm;
     }
