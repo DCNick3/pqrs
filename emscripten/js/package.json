@@ -1,6 +1,6 @@
 {
   "name": "pqrs-js",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Portable QR code scanning library (JS version using wasm/asm.js)",
   "author": "DCNick3 <nikita6@bk.ru> (http://dcnick3.me/)",
   "repository": {
@@ -27,8 +27,8 @@
     "http-server": "^0.12.3",
     "null-loader": "^4.0.1",
     "ts-loader": "^9.2.5",
+    "typescript": "^4.4.2",
     "webpack": "~5.21.2",
-    "webpack-cli": "^4.5.0",
-    "typescript": "^4.4.2"
+    "webpack-cli": "^4.5.0"
   }
 }

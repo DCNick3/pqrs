@@ -13,7 +13,7 @@ declare module "pqrs-js"
 	    finders: Vector[];
 	}
 	export interface PqrsOptions {
-	    locateWasmBinary: (scriptDir: string) => string;
+	    locateFile: (path: string, scriptDirectory: string) => string;
 	}
 	export const wasm_basename: any;
 	export default function (options?: Partial<PqrsOptions>): Promise<{

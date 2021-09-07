@@ -25,15 +25,86 @@ const have_wasm = (() => {
     return false;
 })();
 
+const ENVIRONMENT_IS_WEB = typeof window === "object";
+const ENVIRONMENT_IS_WORKER = typeof importScripts === "function";
+const ENVIRONMENT_IS_NODE = typeof process === "object" && typeof process.versions === "object" && typeof process.versions.node === "string";
+
+const scriptDirectory = (() => {
+    // @ts-ignore
+	var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;
+	if (typeof __filename !== 'undefined') _scriptDir = _scriptDir || __filename;
+    var scriptDirectory = "";
+
+    if (ENVIRONMENT_IS_NODE) {
+        if (ENVIRONMENT_IS_WORKER) {
+            scriptDirectory = require("path").dirname(scriptDirectory) + "/"
+        } else {
+            scriptDirectory = __dirname + "/"
+        }
+    } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
+        if (ENVIRONMENT_IS_WORKER) {
+            scriptDirectory = self.location.href
+        } else if (typeof document !== "undefined" && document.currentScript) {
+            // @ts-ignore
+            scriptDirectory = document.currentScript.src
+        }
+        if (_scriptDir) {
+            scriptDirectory = _scriptDir
+        }
+        if (scriptDirectory.indexOf("blob:") !== 0) {
+            scriptDirectory = scriptDirectory.substr(0, scriptDirectory.lastIndexOf("/") + 1)
+        } else {
+            scriptDirectory = ""
+        }
+    } else {}
+
+    return scriptDirectory;
+})();
+const readAsync: (path: string) => Promise<string> = (() => {
+    let fun: (filename: string, onload: (data: string) => void, onerror: (error: any) => void) => void;
+    
+    if (ENVIRONMENT_IS_NODE) {
+        fun = function(filename, onload, onerror) {
+            const nodeFS = require("fs");
+            const nodePath = require("path");
+            filename = nodePath["normalize"](filename);
+            nodeFS["readFile"](filename, "utf8", function(err: any, data: any) {
+                if (err) onerror(err);
+                else onload(data)
+            });
+        };
+    } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
+        fun = function(url, onload, onerror) {
+            var xhr = new XMLHttpRequest;
+            xhr.open("GET", url, true);
+            xhr.onload = function() {
+                if (xhr.status == 200 || xhr.status == 0 && xhr.response) {
+                    onload(xhr.response);
+                    return
+                }
+                onerror("Bad status:" + xhr.status);
+            };
+            xhr.onerror = onerror;
+            xhr.send(null)
+        }
+    } else {
+        throw "Don't know how to load files";
+    }
+    return (filename: string) => new Promise<string>((res, rej) => fun(filename, res, rej));
+})();
+
 async function get_module(module_base: any) {
     let module;
     // should this log be present in prod?
     console.log("started loading pqrs native code; have_wasm = " + have_wasm);
     if (!have_wasm) {
-        // @ts-ignore
         //module = await import('/bin/pqrs-emscripten-wrapper-pure.js');
         //module = module.default;
-        module = pqrs_pure;
+        const path = module_base.locateFile(pqrs_pure, scriptDirectory);
+        console.log("Loading " + path);
+        let contents = await readAsync(path);
+        contents = `(() => {var module={};var exports={};${contents}; return module.exports;})()`;
+        module = eval(contents);
     } else {
         module = pqrs_wasm;
     }
@@ -56,18 +127,18 @@ export interface ScannedQrs {
 }
 
 export interface PqrsOptions {
-    locateWasmBinary: (scriptDir: string) => string;
+    locateFile: (path: string, scriptDirectory: string) => string;
 }
 
 export const wasm_basename = pqrs_wasm_wasm;
 export default async function(options = <Partial<PqrsOptions>>{}) {
     const module_base = {
-        locateWasmBinary(scriptDirectory: string) {
-            return scriptDirectory + pqrs_wasm_wasm;
-        },
         locateFile(path: string, scriptDirectory: string) {
             if (path.endsWith('.wasm')) {
-                return module_base.locateWasmBinary(scriptDirectory)
+                return scriptDirectory + pqrs_wasm_wasm
+            }
+            if (path.endsWith('.asm.js')) {
+                return scriptDirectory + pqrs_pure;
             }
             return path;
         },

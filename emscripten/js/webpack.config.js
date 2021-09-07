@@ -124,8 +124,10 @@ class DeclarationBundlerPlugin
 }
 
 module.exports = (env, argv) => {
-    let rules = [
-    ];
+    const production = argv.mode === 'production';
+    const development = argv.mode === 'development';
+
+    let rules = [];
 
     rules.push({
         test: /pqrs-emscripten-wrapper-wasm\.wasm$/,
@@ -136,10 +138,25 @@ module.exports = (env, argv) => {
     });
 
     rules.push({
+        test: /pqrs-emscripten-wrapper-pure\.js$/,
+        type: "asset/resource",
+        generator: {
+            filename: 'pqrs.asm.js'
+        }
+    })
+
+    rules.push({
         test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
     });
+
+    let plugins = [];
+
+    plugins.push(new DeclarationBundlerPlugin({
+        moduleName:'pqrs-js',
+        out:'bundle.d.ts',
+    }));
 
     const config = {
         context: path.resolve(__dirname, "."),
@@ -161,12 +178,7 @@ module.exports = (env, argv) => {
         experiments: {
             topLevelAwait: true
         },
-        plugins: [
-            new DeclarationBundlerPlugin({
-                moduleName:'pqrs-js',
-                out:'bundle.d.ts',
-            })
-        ],
+        plugins,
         externals: {
             'fs': 'commonjs2 fs',
             'path': 'commonjs2 path',
@@ -182,12 +194,12 @@ module.exports = (env, argv) => {
         }
     };
     
-    if (argv.mode === 'production') {
+    if (production) {
         config.mode = 'production';
         config.devtool = 'source-map';
     }
     
-    if (argv.mode === 'development') {
+    if (development) {
         config.mode = 'development';
     }
     
