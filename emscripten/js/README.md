@@ -1,4 +1,7 @@
-![](https://img.shields.io/gitlab/pipeline/inno_baam/pqrs/master) ![](https://img.shields.io/npm/v/pqrs-js)
+[![Pipeline status](https://img.shields.io/gitlab/pipeline/inno_baam/pqrs/master)](https://gitlab.com/inno_baam/pqrs/pipelines/latest)
+[![Version](https://img.shields.io/npm/v/pqrs-js.svg)](https://npmjs.org/package/pqrs-js)
+[![Downloads/week](https://img.shields.io/npm/dw/pqrs-js.svg)](https://npmjs.org/package/pqrs-js)
+[![License](https://img.shields.io/npm/l/pqrs-js.svg)](https://github.com/DCNick3/pqrs-js/blob/master/package.json)
 
 # pqrs
 
