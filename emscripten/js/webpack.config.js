@@ -174,6 +174,11 @@ module.exports = (env, argv) => {
         node: {
             __dirname: false,
             __filename: false,
+        },
+        performance: {
+            hints: false,
+            maxEntrypointSize: 512000,
+            maxAssetSize: 512000
         }
     };
     

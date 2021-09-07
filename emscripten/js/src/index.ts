@@ -1,6 +1,5 @@
-// this one is large, so it is put to another webpack chunk
 // @ts-ignore
-//import pqrs_pure from '/bin/pqrs-emscripten-wrapper-pure.js';
+import pqrs_pure from '/bin/pqrs-emscripten-wrapper-pure.js';
 
 // it's okay to import this one directly
 // @ts-ignore
@@ -32,8 +31,9 @@ async function get_module(module_base: any) {
     console.log("started loading pqrs native code; have_wasm = " + have_wasm);
     if (!have_wasm) {
         // @ts-ignore
-        module = await import('/bin/pqrs-emscripten-wrapper-pure.js');
-        module = module.default;
+        //module = await import('/bin/pqrs-emscripten-wrapper-pure.js');
+        //module = module.default;
+        module = pqrs_pure;
     } else {
         module = pqrs_wasm;
     }
