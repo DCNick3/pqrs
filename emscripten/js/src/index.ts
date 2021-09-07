@@ -129,19 +129,26 @@ export interface ScannedQrs {
 
 export interface PqrsOptions {
     locateFile: (path: string, scriptDirectory: string) => string;
+    emscriptenOverrides: object;
 }
 
-export const wasm_basename = pqrs_wasm_wasm;
 export default async function(options = <Partial<PqrsOptions>>{}) {
+    const locateFileRenamed = options.locateFile ?? 
+        function(path: string, scriptDirectory: string) {
+            return scriptDirectory + path;
+        }
+
     const module_base = {
-        locateFile(path: string, scriptDirectory: string) {
+        locateFile(path: string/*, scriptDirectoryEmscripten: string*/) {
+            // we ignore emscripten scriptDirectory and opt in for out own approach
+            // TODO: strip dat shit out of emscripten code (how?)
             if (path.endsWith('.wasm')) {
-                return scriptDirectory + pqrs_wasm_wasm
+                return locateFileRenamed(pqrs_wasm_wasm, scriptDirectory);
             }
             if (path.endsWith('.asm.js')) {
-                return scriptDirectory + pqrs_pure;
+                return locateFileRenamed(pqrs_pure, scriptDirectory);
             }
-            return path;
+            throw "Unknown file to locate: " + path;
         },
         onRuntimeInitialized() {
             console.log("onRuntimeInitialized");
@@ -151,7 +158,7 @@ export default async function(options = <Partial<PqrsOptions>>{}) {
         }
     };
     
-    Object.assign(module_base, options);
+    Object.assign(module_base, options.emscriptenOverrides || {});
 
     const module = await get_module(module_base);
 

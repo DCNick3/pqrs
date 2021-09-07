@@ -14,8 +14,8 @@ declare module "pqrs-js"
 	}
 	export interface PqrsOptions {
 	    locateFile: (path: string, scriptDirectory: string) => string;
+	    emscriptenOverrides: object;
 	}
-	export const wasm_basename: any;
 	export default function (options?: Partial<PqrsOptions>): Promise<{
 	    scan_qr(image_data: ImageData): Promise<ScannedQrs>;
 	}>;
