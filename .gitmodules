@@ -12,4 +12,4 @@
 	url = https://github.com/kikuomax/singular.git
 [submodule "ext-deps/json11"]
 	path = ext-deps/json11
-	url = https://github.com/dropbox/json11.git
+	url = https://github.com/DCNick3/json11.git
