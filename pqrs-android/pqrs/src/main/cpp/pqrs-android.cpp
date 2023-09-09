@@ -1,10 +1,18 @@
+// we ALWAYS need asserts
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+
 #include <pqrs/qr_easy_pipeline.h>
 #include <xtensor/xadapt.hpp>
+#include <xtensor/xview.hpp>
 #include <jni.h>
 #include <android/log.h>
 #include <json11.hpp>
 
 #define TAG "pqrs"
+
+//#define assert()
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -16,28 +24,38 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_me_dcnick3_pqrs_PqrsModule_scanGrayscale(JNIEnv *env, jobject thiz,
                                            jobject buffer,
+                                           jint buffer_size,
                                            jint width,
                                            jint height,
                                            jint pixel_stride,
                                            jint row_stride
 ) {
     auto const* ptr = reinterpret_cast<std::uint8_t const*>(env->GetDirectBufferAddress(buffer));
-    auto size = static_cast<std::size_t>(env->GetDirectBufferCapacity(buffer));
+    auto size = static_cast<std::size_t>(buffer_size);
 
     assert(ptr != nullptr && "The passed buffer is not direct, GetDirectBufferAddress returned NULL");
-    assert(pixel_stride == 1);
-    assert(pixel_stride * row_stride * height == size);
+    assert(pixel_stride == 1 && "The passed buffer does not use 1 pixel stride");
+    assert(pixel_stride * row_stride * height == size && "The passed buffer size does not match the passed dimensions");
 
     std::array<std::size_t, 2> shape = { static_cast<std::size_t>(height), static_cast<std::size_t>(width) };
+    std::array<std::size_t, 2> init_shape = { static_cast<std::size_t>(height), static_cast<std::size_t>(row_stride) };
     std::array<std::size_t, 2> strides = { static_cast<std::size_t>(row_stride), static_cast<std::size_t>(pixel_stride) };
 
     __android_log_print(ANDROID_LOG_VERBOSE, TAG,
-                        "scanning image %p %zu {%zu x %zu}", ptr, size, shape[1], shape[0]
+                        "scanning image %p %zu {%zu x %zu} / [%zu, %zu]", ptr, size, shape[1], shape[0], strides[0], strides[1]
     );
 
-    auto a = xt::adapt(ptr, size, xt::no_ownership(), shape, strides);
+    pqrs::gray_u8 b(shape);
 
-    pqrs::gray_u8 b = a;
+    // I tried fucking around with views, but it seems futile...
+    // it's just easier to copy it manually lol
+    for (int j = 0; j < height; ++j) {
+        memcpy(
+                b.data() + j * width * pixel_stride,
+                ptr + j * row_stride * pixel_stride,
+                width * pixel_stride
+        );
+    }
 
     auto result = pqrs::easy_scan_qr_codes(b);
 
@@ -64,7 +82,7 @@ Java_me_dcnick3_pqrs_PqrsModule_scanGrayscale(JNIEnv *env, jobject thiz,
         obj.emplace("top_left", vec(q.top_left()));
         obj.emplace("top_right", vec(q.top_right()));
 
-        res_qrs.push_back(obj);
+        res_qrs.emplace_back(obj);
     }
 
     json11::Json::object res;

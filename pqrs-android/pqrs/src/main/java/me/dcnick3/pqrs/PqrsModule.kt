@@ -9,5 +9,5 @@ internal object PqrsModule {
     }
 
     private external fun printVersion()
-    external fun scanGrayscale(buffer: ByteBuffer, width: Int, height: Int, pixelStride: Int, rowStride: Int): String;
+    external fun scanGrayscale(buffer: ByteBuffer, bufferSize: Int, width: Int, height: Int, pixelStride: Int, rowStride: Int): String;
 }
