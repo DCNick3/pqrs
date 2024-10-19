@@ -9,9 +9,9 @@ A Portable QR Scanning library.
 Image processing is very much based on algorithms used in [BoofCV](https://boofcv.org).
 Decoding and error correction is based on [zxing](https://github.com/zxing/zxing) 
 
-Requires C++17 compiler. Seems to work with GCC and Clang
+Requires C++17 compiler. Seems to work with GCC and Clang.
 
-Compiles as native code and as webassembly code for browser usage using emscripten
+Currently can be used in C++, Android (via JNI) and Web (via emscripten).
 
 ### Demo
 
@@ -25,10 +25,16 @@ It will work out-of-the box in nodejs and will probably require special handling
 
 You can see [pqrs-cli](https://github.com/DCNick3/pqrs-cli) for example usage.
 
+### Using in Android projects
+
+The android library is published on maven central as `me.dcnick3.pqrs:pqrs-android` (see https://central.sonatype.com/artifact/me.dcnick3.pqrs/pqrs-android). Add it to your project.
+
+Then call `PqrsScanner.scanGrayscale` and get the scan results back. The Android API is a bit rough and is only really designed to be used as a Android CameraX analyzer. See example usage [here](https://github.com/DCNick3/baam-android/blob/df8b73c1d98c793701cb0f2a4db053daf17927b9/app/src/main/java/me/dcnick3/baam/ui/camera/ScannerScreen.kt#L82).
+
 ## Long and sad story as to why this was created
 
 I needed a QR scanning library in web application. 
-So, I went with [jsQR](https://github.com/cozmo/jsQR), which is one of [zxing](https://github.com/zxing/zxing)  ports to js.
+So, I went with [jsQR](https://github.com/cozmo/jsQR), which is one of [zxing](https://github.com/zxing/zxing) ports to js.
 What could go wrong? Apparently, a lot.
 
 The scanner was used to scan an image projected to screen in an intensively lit big lecture room.
