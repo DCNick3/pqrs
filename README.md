@@ -15,7 +15,7 @@ Currently can be used in C++, Android (via JNI) and Web (via emscripten).
 
 ### Demo
 
-Demo is available [here](https://dcnick3.me/js/pqrs-test.html)
+Demo is available [here](https://dcnick3.me/js/pqrs-demo/)
 
 ### Using in js projects
 
@@ -76,3 +76,7 @@ From this I got, on one hand, an ability to use it in much more languages than B
 
 It is not a direct port, some corners were cut (where it seemed like it would not affect performance or scanning quality), some features were added (like local thresholding when sampling QR code modules, which handled the uneven lighting).
 
+## Known Issues
+
+- The scanner can't scan QR codes of version 7 & higher. I haven't yet investigated why
+- The scanner struggles with non-standard novelty QR codes (non-standard colors, low margins, non-standard shapes for finder patterns, etc). This is unlikely to be fixed.
