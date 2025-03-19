@@ -5,6 +5,8 @@ set (CMAKE_CXX_STANDARD 17)
 
 # add the pqrs library itself
 add_subdirectory(../.. pqrs)
+# and json11 library
+add_subdirectory(../../ext-deps/json11 ext-deps/json11)
 
 find_library(log-lib log)
 
